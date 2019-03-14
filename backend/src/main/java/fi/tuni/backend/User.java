@@ -22,8 +22,8 @@ public class User {
     }
 
     public User(String firstName, String lastName) {
-        this.firstName = firstName;
-        this.lastName = lastName;
+        setFirstName(firstName);
+        setLastName(lastName);
     }
 
     public User(){}
