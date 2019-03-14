@@ -17,13 +17,13 @@ public class Article {
 
     private String content;
 
-    private User author;
+    private int authorID;
 
-    public Article(LocalDate date, String title, String content, User author) {
+    public Article(LocalDate date, String title, String content, int author) {
         this.date = date;
         this.title = title;
         this.content = content;
-        this.author = author;
+        this.authorID = author;
     }
 
     public int getId() {
@@ -46,12 +46,12 @@ public class Article {
         this.content = content;
     }
 
-    public User getAuthor() {
-        return author;
+    public int getAuthor() {
+        return authorID;
     }
 
-    public void setAuthor(User author) {
-        this.author = author;
+    public void setAuthor(int author) {
+        this.authorID = author;
     }
 
     public LocalDate getDate() {
