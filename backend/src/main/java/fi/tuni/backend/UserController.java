@@ -1,6 +1,5 @@
 package fi.tuni.backend;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpHeaders;
@@ -16,7 +15,7 @@ public class UserController {
     @Autowired
     UserRepository userRepository;
 
-    @RequestMapping(value="users", method = RequestMethod.POST)
+    @PostMapping("users")
     public ResponseEntity<Void> addUser(User u, UriComponentsBuilder builder) {
         userRepository.save(u);
         UriComponents uriComponents = builder.path("users/{id}").buildAndExpand(u.getId());
@@ -26,7 +25,7 @@ public class UserController {
         return new ResponseEntity<Void>(header, HttpStatus.CREATED);
     }
 
-    @RequestMapping(value="users/{id}", method = RequestMethod.DELETE)
+    @DeleteMapping("users/{id:\\d}")
     public ResponseEntity<Void> removeUser(@PathVariable int id, UriComponentsBuilder builder) {
         try {
             userRepository.deleteById(id);
@@ -36,12 +35,12 @@ public class UserController {
         }
     }
 
-    @RequestMapping(value="users/{id}", method = RequestMethod.GET)
+    @GetMapping("users/{id:\\d}")
     public User getUser(@PathVariable int id) {
         return userRepository.findById(id).orElseThrow(() -> new CannotFindTargetException(id, "Cannot find user with id  " +  id));
     }
 
-    @RequestMapping(value="users", method = RequestMethod.GET)
+    @GetMapping("users")
     public Iterable<User> getUsers() {
         return userRepository.findAll();
     }
