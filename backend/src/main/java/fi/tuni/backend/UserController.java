@@ -38,7 +38,7 @@ public class UserController {
 
     @RequestMapping(value="users/{id}", method = RequestMethod.GET)
     public User getUser(@PathVariable int id) {
-        return userRepository.findById(id).orElse(null);
+        return userRepository.findById(id).orElseThrow(() -> new CannotFindUserException(id, "Cannot find user with id  " +  id));
     }
 
     @RequestMapping(value="users", method = RequestMethod.GET)
