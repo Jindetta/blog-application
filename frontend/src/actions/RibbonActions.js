@@ -1,6 +1,6 @@
-export function exampleAction(value) {
+export function switchMenu(value) {
   return {
-    type: "EXAMPLE",
+    type: "ACTIVE_MENU",
     payload: value
   }
 }
