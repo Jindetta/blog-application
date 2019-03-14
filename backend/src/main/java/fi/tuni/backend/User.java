@@ -22,6 +22,8 @@ public class User {
         this.lastName = lastName;
     }
 
+    public User(){}
+
     public String getFirstName() {
         return firstName;
     }
