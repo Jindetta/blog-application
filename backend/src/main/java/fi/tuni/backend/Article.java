@@ -12,13 +12,16 @@ public class Article {
     @GeneratedValue
     private int id;
 
+    @Column
     private LocalDate date;
 
+    @Column
     private String title;
 
     @Column(length = 10000)
     private String content;
 
+    @Column
     private int authorID;
 
     public Article(LocalDate date, String title, String content, int author) {
