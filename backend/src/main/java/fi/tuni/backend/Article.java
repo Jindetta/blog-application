@@ -28,6 +28,8 @@ public class Article {
         this.authorID = author;
     }
 
+    public Article() {}
+
     public int getId() {
         return id;
     }
@@ -62,5 +64,10 @@ public class Article {
 
     public void setDate(LocalDate date) {
         this.date = date;
+    }
+
+    @Override
+    public String toString() {
+        return "{AuthorID: " + authorID + " Date: " + date +  " Title: " + title + " Content: " + content + "}";
     }
 }
