@@ -3,15 +3,28 @@ package fi.tuni.backend;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.time.LocalDate;
 
 @Entity
 public class Article {
     @Id
     @GeneratedValue
     private int id;
+
+    private LocalDate date;
+
     private String title;
+
     private String content;
+
     private User author;
+
+    public Article(LocalDate date, String title, String content, User author) {
+        this.date = date;
+        this.title = title;
+        this.content = content;
+        this.author = author;
+    }
 
     public int getId() {
         return id;
@@ -41,9 +54,11 @@ public class Article {
         this.author = author;
     }
 
-    public Article(String title, String content, User author) {
-        this.title = title;
-        this.content = content;
-        this.author = author;
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
     }
 }
