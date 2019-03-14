@@ -22,13 +22,17 @@ public class Article {
     private String content;
 
     @Column
-    private int authorID;
+    private int authorId;
+
+    public Article(String title, String content, int authorId) {
+        this(LocalDate.now(), title, content, authorId);
+    }
 
     public Article(LocalDate date, String title, String content, int author) {
-        this.date = date;
-        this.title = title;
-        this.content = content;
-        this.authorID = author;
+        setDate(date);
+        setTitle(title);
+        setContent(content);
+        setAuthor(author);
     }
 
     public Article() {}
@@ -54,11 +58,11 @@ public class Article {
     }
 
     public int getAuthor() {
-        return authorID;
+        return authorId;
     }
 
     public void setAuthor(int author) {
-        this.authorID = author;
+        this.authorId = author;
     }
 
     public LocalDate getDate() {
@@ -71,6 +75,6 @@ public class Article {
 
     @Override
     public String toString() {
-        return "{AuthorID: " + authorID + " Date: " + date +  " Title: " + title + " Content: " + content + "}";
+        return "{AuthorID: " + authorId + " Date: " + date +  " Title: " + title + " Content: " + content + "}";
     }
 }
