@@ -32,13 +32,13 @@ public class UserController {
             userRepository.deleteById(id);
             return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
         } catch (EmptyResultDataAccessException e) {
-            throw new CannotFindUserException(id,"Cannot find user with id  " +  id);
+            throw new CannotFindTargetException(id,"Cannot find user with id  " +  id);
         }
     }
 
     @RequestMapping(value="users/{id}", method = RequestMethod.GET)
     public User getUser(@PathVariable int id) {
-        return userRepository.findById(id).orElseThrow(() -> new CannotFindUserException(id, "Cannot find user with id  " +  id));
+        return userRepository.findById(id).orElseThrow(() -> new CannotFindTargetException(id, "Cannot find user with id  " +  id));
     }
 
     @RequestMapping(value="users", method = RequestMethod.GET)

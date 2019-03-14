@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
 public class UserControllerExceptionHandler {
-    @ExceptionHandler(CannotFindUserException.class)
-    public ResponseEntity<ErrorInfo> handleNoCustomer(CannotFindUserException exception) {
+    @ExceptionHandler(CannotFindTargetException.class)
+    public ResponseEntity<ErrorInfo> handleNoCustomer(CannotFindTargetException exception) {
         return new ResponseEntity<ErrorInfo>(new ErrorInfo(exception.getMessage()), HttpStatus.NOT_FOUND);
     }
 
