@@ -1,15 +1,23 @@
 package fi.tuni.backend;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+
+import java.time.format.DateTimeParseException;
 
 @ControllerAdvice
 public class ControllerExceptionHandler {
     @ExceptionHandler(CannotFindTargetException.class)
     public ResponseEntity<ErrorInfo> handleNoTarget(CannotFindTargetException exception) {
         return new ResponseEntity<ErrorInfo>(new ErrorInfo(exception.getMessage()), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(DateTimeParseException.class)
+    public ResponseEntity<ErrorInfo> handleDateParseException(DateTimeParseException exception) {
+        return new ResponseEntity<ErrorInfo>(new ErrorInfo(exception.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
     class ErrorInfo {
