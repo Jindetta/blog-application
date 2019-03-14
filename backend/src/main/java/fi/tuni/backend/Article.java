@@ -1,5 +1,6 @@
 package fi.tuni.backend;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -15,6 +16,7 @@ public class Article {
 
     private String title;
 
+    @Column(length = 10000)
     private String content;
 
     private int authorID;
