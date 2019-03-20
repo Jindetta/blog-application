@@ -35,6 +35,13 @@ public class Article {
         setAuthor(author);
     }
 
+    public Article(int id, LocalDate date, String title, String content, int author) {
+        setDate(date);
+        setTitle(title);
+        setContent(content);
+        setAuthor(author);
+    }
+
     public Article() {}
 
     public int getId() {
