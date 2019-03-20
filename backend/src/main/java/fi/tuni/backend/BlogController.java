@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.util.Optional;
+
 @RestController
 public class BlogController {
 
@@ -52,6 +54,25 @@ public class BlogController {
         HttpHeaders header = new HttpHeaders();
         header.setLocation(uriComponents.toUri());
 
-        return new ResponseEntity<Void>(header, HttpStatus.CREATED);
+        return new ResponseEntity<Void>(header, status);
+    }
+
+    @PostMapping("blogs/edit/{id:\\d}")
+    public ResponseEntity<Void> editBlog(@PathVariable int id,
+                                        @RequestParam String title,
+                                        @RequestParam int authorId,
+                                        @RequestParam String content,
+                                        UriComponentsBuilder builder) {
+        Optional<Article> optionalArticle = blogRepository.findById(id);
+        if(optionalArticle.isPresent()) {
+            Article article = optionalArticle.get();
+            article.setTitle(title);
+            article.setAuthor(authorId);
+            article.setContent(content);
+            blogRepository.save(article);
+            return getVoidResponseEntity(builder, article, HttpStatus.CREATED);
+        } else {
+            throw new CannotFindTargetException(id, "Couldn't modify id " + id + " because it doesn't exist");
+        }
     }
 }
