@@ -41,8 +41,12 @@ public class BlogController {
                            @RequestParam String content,
                            UriComponentsBuilder builder) {
         Article article = new Article(title,content,authorId);
-
         blogRepository.save(article);
+
+        return getVoidResponseEntity(builder, article, HttpStatus.CREATED);
+    }
+
+    private ResponseEntity<Void> getVoidResponseEntity(UriComponentsBuilder builder, Article article, HttpStatus status) {
 
         UriComponents uriComponents = builder.path("blogs/{id}").buildAndExpand(article.getId());
         HttpHeaders header = new HttpHeaders();
