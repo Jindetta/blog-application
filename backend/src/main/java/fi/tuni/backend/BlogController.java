@@ -15,7 +15,7 @@ public class BlogController {
     @Autowired
     BlogRepository blogRepository;
 
-    @PostMapping("blogs/{id:\\d}")
+    @GetMapping("blogs/{id:\\d}")
     public Article getArticle(@PathVariable int id) {
         return blogRepository.findById(id).orElseThrow(() -> new CannotFindTargetException(id, "Cannot find article with id:" + id));
     }
