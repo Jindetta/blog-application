@@ -4,4 +4,6 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface BlogRepository extends CrudRepository<Article, Integer> {
     Iterable<Article> findArticlesByAuthorIdEquals(int authorId);
+    Iterable<Article> findArticlesByTitleContainingIgnoreCaseOrContentContainingIgnoreCase(String title, String content);
+
 }
