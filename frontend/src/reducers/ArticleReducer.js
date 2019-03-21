@@ -1,10 +1,8 @@
 const DEFAULT_STATE = {
-  // Default component state
+  BLOG_DATA: null,
+  AUTHOR_DATA: null
 };
 
 export default (state = DEFAULT_STATE, action) => {
-  switch (action.type) {
-    // Actions
-  }
-  return state;
+  return {...state, [action.type]: action.payload};
 }
