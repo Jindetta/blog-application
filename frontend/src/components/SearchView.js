@@ -15,12 +15,13 @@ class SearchView extends Component{
   }
 
   textChanged(event) {
-    console.log(event.target.value);
     this.props.dispatch(actions.setSearchValue(event.target.value))
   }
 
   searchClicked() {
-      console.log(this.props.SEARCH_VALUE);
+    const url = window.location.origin;
+    fetch("http://localhost:8080/blogs").then(response => response.json())
+      .then(data => this.props.dispatch(actions.setPosts(data)))
   }
 
   render() {
