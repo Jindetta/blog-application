@@ -75,4 +75,9 @@ public class BlogController {
             throw new CannotFindTargetException(id, "Couldn't modify id " + id + " because it doesn't exist");
         }
     }
+
+    @GetMapping("blogs/search/{value}")
+    public Iterable<Article> searchPost(@PathVariable String value) {
+        return blogRepository.findArticlesByTitleContainingIgnoreCaseOrContentContainingIgnoreCase(value,value);
+    }
 }
