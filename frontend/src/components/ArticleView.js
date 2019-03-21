@@ -5,7 +5,9 @@ import * as actions from '../actions/ArticleActions';
 
 import {TreeTable} from 'primereact/treetable';
 import {Column} from 'primereact/column';
+
 import './ArticleView.css';
+
 class ArticleView extends Component {
   constructor(props) {
     super(props);
@@ -63,9 +65,11 @@ class ArticleView extends Component {
 
   render() {
     return (
-      <div>
-        {this.getContent()}
-      </div>
+        <div className="p-grid">
+          <div className="p-col-12" id="page">
+              {this.getContent()}
+          </div>
+        </div>
     );
   }
 /*
