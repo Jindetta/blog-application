@@ -23,7 +23,7 @@ class SearchView extends Component{
 
   searchClicked() {
     const url = window.location.origin;
-    fetch("http://localhost:8080/blogs").then(response => response.json())
+    fetch(`http://localhost:8080/blogs/search/${this.props.SEARCH_VALUE}`).then(response => response.json())
       .then(data => this.props.dispatch(actions.setPosts(data)))
   }
 
