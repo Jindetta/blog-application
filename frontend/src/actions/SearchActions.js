@@ -4,3 +4,10 @@ export function setSearchValue(value) {
     payload: value
   }
 }
+
+export function setPosts(value) {
+  return {
+    type: "POSTS",
+    payload: value
+  }
+}
