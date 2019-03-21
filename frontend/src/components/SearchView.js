@@ -11,11 +11,16 @@ class SearchView extends Component{
   constructor(props) {
     super(props);
     this.textChanged = this.textChanged.bind(this);
+    this.searchClicked = this.searchClicked.bind(this);
   }
 
   textChanged(event) {
     console.log(event.target.value);
     this.props.dispatch(actions.setSearchValue(event.target.value))
+  }
+
+  searchClicked() {
+      console.log(this.props.SEARCH_VALUE);
   }
 
   render() {
@@ -24,7 +29,7 @@ class SearchView extends Component{
         <div className="p-col-12" id="page">
           <div className="p-col-4">
             <h3>Search</h3>
-            <Button label="Search" icon="pi pi-fw pi-search" onClick={() => console.log(this.props.SEARCH_VALUE)}/>
+            <Button label="Search" icon="pi pi-fw pi-search" onClick={this.searchClicked}/>
             <InputText placeholder="Keyword" value={this.props.SEARCH_VALUE} onChange={this.textChanged}/>
           </div>
           <div className="p-col-12" id="results">
