@@ -14,7 +14,7 @@ class App extends Component {
     return (
       <div className="p-grid p-justify-center">
         <div className="p-col-10">
-          <SearchView/>
+          <ArticleView/>
         </div>
       </div>
     );
