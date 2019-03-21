@@ -77,7 +77,7 @@ public class BlogController {
     }
 
     @GetMapping("blogs/search/{value}")
-    public Iterable<Article> searchPost(@PathVariable String value, UriComponentsBuilder builder) {
+    public Iterable<Article> searchPost(@PathVariable String value) {
         return blogRepository.findArticlesByTitleContainingIgnoreCaseOrContentContainingIgnoreCase(value,value);
     }
 }
