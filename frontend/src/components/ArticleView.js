@@ -15,7 +15,7 @@ class ArticleView extends Component {
     let url = window.location.origin;
 
     fetch(`${url}/blogs`).then(response => response.json())
-      .then(data => this.setState({posts: data}));
+      .then(data => this.setState({posts: data})).catch(error => console.log(error));
   }
 
   render() {
