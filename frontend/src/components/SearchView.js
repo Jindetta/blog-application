@@ -29,20 +29,24 @@ class SearchView extends Component{
 
   createAccordionTab(post) {
     return (
-      <AccordionTab header={post.title + " / " + post.date}>
+      <AccordionTab header={post.title + " / " + post.date} key={post.id}>
         {post.content}
         <br/><br/>
-        <Button label="Go to post"/>
+        <Button label="Go to post" onClick={event => console.log("Should move to this post: ", post)}/>
       </AccordionTab>
     );
   }
 
   createPostsList() {
-    if(this.props.POSTS) {
+    if(this.props.POSTS.length > 0) {
+      const len = this.props.POSTS.length;
       return (
-        <Accordion multiple={true}>
-          {this.props.POSTS.map(post => this.createAccordionTab(post))}
-        </Accordion>
+        <div>
+          <p>Found {len} {len <= 1? 'post':'posts'}</p>
+          <Accordion multiple={true}>
+            {this.props.POSTS.map(post => this.createAccordionTab(post))}
+          </Accordion>
+        </div>
       );
     } else {
       return <p>No posts found</p>
