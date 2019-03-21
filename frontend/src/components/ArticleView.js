@@ -1,9 +1,10 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
 
-import {ProgressSpinner} from 'primereact/progressspinner';
+import {Panel} from 'primereact/panel';
 
 import * as actions from '../actions/ArticleActions';
+import Loader from './Loader';
 
 import './ArticleView.css';
 
@@ -13,6 +14,7 @@ class ArticleView extends Component {
 
     this.getContent = this.getContent.bind(this);
     this.fetchUserData = this.fetchUserData.bind(this);
+    this.renderArticle = this.renderArticle.bind(this);
 
     let path = window.location.pathname;
     let pattern = /\/article\//g;
@@ -32,77 +34,79 @@ class ArticleView extends Component {
       .then(() => this.fetchUserData());
   }
 
-  fetchUserData() {
-    if(this.props.BLOG_DATA) {
-      fetch(`${this.fetchUrl}/users/${this.props.BLOG_DATA.author}`)
+  fetchUserData(userData) {
+    if(userData) {
+      return this.props.AUTHOR_DATA.filter(item => item.id === userData.id);
+    } else {
+      fetch(`${this.fetchUrl}/users`)
         .then(response => response.json())
         .then(data => this.props.dispatch(actions.setAuthorData(data)));
     }
   }
 
+  renderArticle(data) {
+    const error = ArticleView.getErrorMessage(data);
+
+    if (error) {
+      return error;
+    }
+
+    /*if(authorData != null) {
+      return (
+        <div>
+          <h1>{blogData.title + " / " + authorData.firstName + " " + authorData.lastName}</h1>
+          <h3>{blogData.content}</h3>
+        </div>
+      );
+    } else {
+      return(
+        <div>
+          <h1>{blogData.title + " fetching author..."}</h1>
+          <h3>{blogData.content}</h3>
+        </div>
+      );
+    }*/
+
+    return (
+      <div key={data.id}>
+        <h1>{data.title}</h1>
+        <h3>{data.content}</h3>
+      </div>
+    );
+  }
+
   getContent() {
     const blogData = this.props.BLOG_DATA;
-    const authorData = this.props.AUTHOR_DATA;
 
     if(blogData != null) {
-      console.log(blogData);
-      if(authorData != null) {
-        return (
-          <div>
-            <h1>{blogData.title + " / " + authorData.firstName + " " + authorData.lastName}</h1>
-            <h3>{blogData.content}</h3>
-          </div>
-        );
+      if (Array.isArray(blogData)) {
+        return blogData.map(blogEntry => this.renderArticle(blogEntry));
       } else {
-        return(
-          <div>
-            <h1>{blogData.title + " fetching author..."}</h1>
-            <h3>{blogData.content}</h3>
-          </div>
-        );
+        return this.renderArticle(blogData);
       }
     }
 
-    return (
-      <div>
-        <ProgressSpinner/>
-        <p>Fetching, please wait...</p>
-      </div>
-    );
+    return <Loader text="Fetching data..." />;
   }
 
   render() {
-    return (
-      <div>
-        {this.getContent()}
-      </div>
-    );
-  }
-/*
-  componentDidMount() {
-    let url = window.location.origin;
+    console.log(this.props.BLOG_DATA);
+    console.log(this.props.AUTHOR_DATA);
 
-    fetch(`${url}/blogs`).then(response => response.json())
-      .then(data => this.setState({posts: data})).catch(error => console.log(error));
+    return this.getContent();
   }
 
-  render() {
-    return (
-      <div className="p-grid">
-        <div className="p-col-12" id="page">
-          <TreeTable responsive={true} value={this.state.posts.map(item => {
-            return {key: item.id, data: {...item}};
-          })}>
-            <Column field="id" header="ID" />
-            <Column field="date" header="Date" />
-            <Column field="author" header="Author ID" />
-            <Column field="title" header="Title" />
-            <Column field="content" header="Content" />
-          </TreeTable>
-        </div>
-      </div>
-    );
-  }*/
+  static getErrorMessage(data) {
+    if (typeof data === "object" && data["errorMessage"]) {
+      return (
+        <Panel header="Error" toggleable={true} className="error">
+          <p>{data["errorMessage"]}</p>
+        </Panel>
+      );
+    }
+
+    return null;
+  }
 }
 
 export default connect(data => data.article)(ArticleView);
