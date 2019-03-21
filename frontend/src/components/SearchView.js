@@ -5,6 +5,7 @@ import {connect} from "react-redux";
 import './SearchView.css';
 import {Button} from "primereact/button";
 import {InputText} from "primereact/inputtext";
+import * as actions from '../actions/SearchActions';
 
 class SearchView extends Component{
   constructor(props) {
@@ -29,4 +30,4 @@ class SearchView extends Component{
   }
 }
 
-export default connect(data => data.article)(SearchView)
+export default connect(data => data.search)(SearchView)
