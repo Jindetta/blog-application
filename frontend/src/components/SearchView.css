@@ -6,3 +6,8 @@
     margin-top: 2em;
     padding: 2em;
 }
+
+#results {
+    margin-top: 1em;
+    box-shadow: 0pt 1pt 1pt 0pt grey;
+}
