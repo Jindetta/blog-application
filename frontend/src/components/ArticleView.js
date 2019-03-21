@@ -1,11 +1,12 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
 
+import {ProgressSpinner} from 'primereact/progressspinner';
+
 import * as actions from '../actions/ArticleActions';
 
-import {TreeTable} from 'primereact/treetable';
-import {Column} from 'primereact/column';
 import './ArticleView.css';
+
 class ArticleView extends Component {
   constructor(props) {
     super(props);
@@ -54,11 +55,14 @@ class ArticleView extends Component {
           </div>
         );
       }
-    } else {
-      return(
-        <h1>Fetching data,,,,</h1>
-      );
     }
+
+    return (
+      <div>
+        <ProgressSpinner/>
+        <p>Fetching, please wait...</p>
+      </div>
+    );
   }
 
   render() {
