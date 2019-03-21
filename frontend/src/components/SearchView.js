@@ -6,12 +6,15 @@ import './SearchView.css';
 import {Button} from "primereact/button";
 import {InputText} from "primereact/inputtext";
 import * as actions from '../actions/SearchActions';
+import {Accordion, AccordionTab} from "primereact/accordion";
 
 class SearchView extends Component{
   constructor(props) {
     super(props);
     this.textChanged = this.textChanged.bind(this);
     this.searchClicked = this.searchClicked.bind(this);
+    this.createPostsList = this.createPostsList.bind(this);
+    this.createAccordionTab = this.createAccordionTab.bind(this);
   }
 
   textChanged(event) {
@@ -24,6 +27,28 @@ class SearchView extends Component{
       .then(data => this.props.dispatch(actions.setPosts(data)))
   }
 
+  createAccordionTab(post) {
+    return (
+      <AccordionTab header={post.title + " / " + post.date}>
+        {post.content}
+        <br/><br/>
+        <Button label="Go to post"/>
+      </AccordionTab>
+    );
+  }
+
+  createPostsList() {
+    if(this.props.POSTS) {
+      return (
+        <Accordion multiple={true}>
+          {this.props.POSTS.map(post => this.createAccordionTab(post))}
+        </Accordion>
+      );
+    } else {
+      return <p>No posts found</p>
+    }
+  }
+
   render() {
     return (
       <div className="p-grid">
@@ -34,7 +59,7 @@ class SearchView extends Component{
             <InputText placeholder="Keyword" value={this.props.SEARCH_VALUE} onChange={this.textChanged}/>
           </div>
           <div className="p-col-12" id="results">
-            <p>Search results here</p>
+            {this.createPostsList()}
           </div>
         </div>
       </div>
