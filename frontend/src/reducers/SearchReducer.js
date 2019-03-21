@@ -1,5 +1,5 @@
 const DEFAULT_STATE = {
-  SEARCH_VALUE: 'default value'
+  SEARCH_VALUE: ''
 };
 
 export default (state = DEFAULT_STATE, action) => {
