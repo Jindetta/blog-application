@@ -17,10 +17,16 @@ class ArticleView extends Component {
     let path = window.location.pathname;
     let pattern = /\/article\//g;
     this.number = path.replace(pattern, "");
+
+    if (process.env.NODE_ENV === "development") {
+      this.fetchUrl = "http://localhost:8080";
+    } else {
+      this.fetchUrl = window.location.origin;
+    }
   }
 
   componentWillMount() {
-    fetch(`http://localhost:8080/blogs/${this.number}`)
+    fetch(`${this.fetchUrl}/blogs/${this.number}`)
       .then(response => response.json())
       .then(data => this.props.dispatch(actions.setBlogData(data)))
       .then(() => this.fetchUserData());
@@ -28,7 +34,7 @@ class ArticleView extends Component {
 
   fetchUserData() {
     if(this.props.BLOG_DATA) {
-      fetch(`http://localhost:8080/users/${this.props.BLOG_DATA.author}`)
+      fetch(`${this.fetchUrl}/users/${this.props.BLOG_DATA.author}`)
         .then(response => response.json())
         .then(data => this.props.dispatch(actions.setAuthorData(data)));
     }
