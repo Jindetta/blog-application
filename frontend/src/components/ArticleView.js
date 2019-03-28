@@ -90,9 +90,6 @@ class ArticleView extends Component {
   }
 
   render() {
-    console.log(this.props.BLOG_DATA);
-    console.log(this.props.AUTHOR_DATA);
-
     return this.getContent();
   }
 
