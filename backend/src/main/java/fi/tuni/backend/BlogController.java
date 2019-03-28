@@ -76,22 +76,38 @@ public class BlogController {
     }
 
     @PostMapping("blogs/edit/{id:\\d}")
-    public ResponseEntity<Void> editBlog(@PathVariable int id,
-                                        @RequestParam String title,
-                                        @RequestParam int authorId,
-                                        @RequestParam String content,
-                                        UriComponentsBuilder builder) {
+    public ResponseEntity<Void> editBlog(@PathVariable int id, Article newArticle, @RequestParam int editorId, UriComponentsBuilder builder) {
+
         Optional<Article> optionalArticle = blogRepository.findById(id);
-        if(optionalArticle.isPresent()) {
-            Article article = optionalArticle.get();
-            article.setTitle(title);
-            article.setAuthor(authorId);
-            article.setContent(content);
-            blogRepository.save(article);
-            return getVoidResponseEntity(builder, article, HttpStatus.CREATED);
-        } else {
-            throw new CannotFindTargetException(id, "Couldn't modify id " + id + " because it doesn't exist");
+        Optional<User> optionalUser = userRepository.findById(newArticle.getAuthor());
+        Optional<User> optionalEditor = userRepository.findById(editorId);
+
+        if(optionalUser.isPresent()) {
+            if(optionalEditor.isPresent()) {
+                if (optionalEditor.get().isAdmin()) {
+                    if (optionalArticle.isPresent()) {
+
+                        Article article = optionalArticle.get();
+
+                        article.setTitle(newArticle.getTitle());
+                        article.setAuthor(newArticle.getAuthor());
+                        article.setContent(newArticle.getContent());
+
+                        blogRepository.save(article);
+
+                        return getVoidResponseEntity(builder, article, HttpStatus.CREATED);
+                    }
+
+                    throw new CannotFindTargetException(id, "Couldn't modify id " + id + " because it doesn't exist");
+                }
+
+                throw new UserNotAdminException("Forbidden action, user with id " + editorId + " is not a admin");
+            }
+
+            throw new CannotFindTargetException(editorId, "Cannot find user with id " + editorId);
         }
+
+        throw new CannotFindTargetException(newArticle.getAuthor(), "Cannot find user with id" + newArticle.getAuthor());
     }
 
     @GetMapping("blogs/search/{value}")
