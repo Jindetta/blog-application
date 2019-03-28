@@ -19,6 +19,9 @@ public class Comment {
     @Column(length = 1000)
     private String comment;
 
+    public Comment() {
+    }
+
     public Comment(User author, Article article, String comment) {
         setAuthor(author);
         setArticle(article);
@@ -55,5 +58,10 @@ public class Comment {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("{Author: %d, Article: %d, Comment: \"%s\"}", author.getId(), article.getId(), comment);
     }
 }
