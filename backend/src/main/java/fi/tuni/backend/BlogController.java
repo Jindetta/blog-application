@@ -52,24 +52,18 @@ public class BlogController {
     }
 
     @PostMapping("blogs")
-    public ResponseEntity<Void> addArticle(@RequestParam String title,
-                           @RequestParam int userId,
-                           @RequestParam String content,
-                           UriComponentsBuilder builder) {
-
-        Optional<User> user = userRepository.findById(userId);
+    public ResponseEntity<Void> addArticle(Article article, UriComponentsBuilder builder) {
+        Optional<User> user = userRepository.findById(article.getAuthor());
 
         if(user.isPresent()) {
             if(user.get().isAdmin()) {
-                Article article = new Article(title, content, userId);
                 blogRepository.save(article);
                 return getVoidResponseEntity(builder, article, HttpStatus.CREATED);
             }
 
-            throw new UserNotAdminException("Forbidden action, user with id " + userId + " is not a admin");
+            throw new UserNotAdminException("Forbidden action, user with id " + article.getAuthor() + " is not a admin");
         }
-        throw new CannotFindTargetException(userId, "Cannot find user with id:" + userId);
-
+        throw new CannotFindTargetException(article.getAuthor(), "Cannot find user with id:" + article.getAuthor());
     }
 
     private ResponseEntity<Void> getVoidResponseEntity(UriComponentsBuilder builder, Article article, HttpStatus status) {
