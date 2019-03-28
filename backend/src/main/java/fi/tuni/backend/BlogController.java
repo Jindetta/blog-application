@@ -53,13 +53,23 @@ public class BlogController {
 
     @PostMapping("blogs")
     public ResponseEntity<Void> addArticle(@RequestParam String title,
-                           @RequestParam int authorId,
+                           @RequestParam int userId,
                            @RequestParam String content,
                            UriComponentsBuilder builder) {
-        Article article = new Article(title,content,authorId);
-        blogRepository.save(article);
 
-        return getVoidResponseEntity(builder, article, HttpStatus.CREATED);
+        Optional<User> user = userRepository.findById(userId);
+
+        if(user.isPresent()) {
+            if(user.get().isAdmin()) {
+                Article article = new Article(title, content, userId);
+                blogRepository.save(article);
+                return getVoidResponseEntity(builder, article, HttpStatus.CREATED);
+            }
+
+            throw new UserNotAdminException("Forbidden action, user with id " + userId + " is not a admin");
+        }
+        throw new CannotFindTargetException(userId, "Cannot find user with id:" + userId);
+
     }
 
     private ResponseEntity<Void> getVoidResponseEntity(UriComponentsBuilder builder, Article article, HttpStatus status) {
