@@ -20,6 +20,11 @@ public class ControllerExceptionHandler {
         return new ResponseEntity<ErrorInfo>(new ErrorInfo(exception.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(UserNotAdminException.class)
+    public ResponseEntity<ErrorInfo> handleUserNotAdmin(UserNotAdminException exception) {
+        return new ResponseEntity<ErrorInfo>(new ErrorInfo(exception.getMessage()), HttpStatus.UNAUTHORIZED);
+    }
+
     class ErrorInfo {
         private String errorMessage;
 
