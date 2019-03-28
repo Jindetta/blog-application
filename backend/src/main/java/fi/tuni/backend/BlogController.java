@@ -53,7 +53,7 @@ public class BlogController {
 
     @PostMapping("blogs")
     public ResponseEntity<Void> addArticle(Article article, UriComponentsBuilder builder) {
-        Optional<User> user = userRepository.findById(article.getAuthor());
+        Optional<User> user = userRepository.findById(article.getAuthor().getId());
 
         if(user.isPresent()) {
             if(user.get().isAdmin()) {
@@ -63,7 +63,7 @@ public class BlogController {
 
             throw new UserNotAdminException("Forbidden action, user with id " + article.getAuthor() + " is not a admin");
         }
-        throw new CannotFindTargetException(article.getAuthor(), "Cannot find user with id:" + article.getAuthor());
+        throw new CannotFindTargetException(article.getAuthor().getId(), "Cannot find user with id:" + article.getAuthor().getId());
     }
 
     private ResponseEntity<Void> getVoidResponseEntity(UriComponentsBuilder builder, Article article, HttpStatus status) {
@@ -79,7 +79,7 @@ public class BlogController {
     public ResponseEntity<Void> editBlog(@PathVariable int id, Article newArticle, @RequestParam int editorId, UriComponentsBuilder builder) {
 
         Optional<Article> optionalArticle = blogRepository.findById(id);
-        Optional<User> optionalUser = userRepository.findById(newArticle.getAuthor());
+        Optional<User> optionalUser = userRepository.findById(newArticle.getAuthor().getId());
         Optional<User> optionalEditor = userRepository.findById(editorId);
 
         if(optionalUser.isPresent()) {
@@ -107,7 +107,7 @@ public class BlogController {
             throw new CannotFindTargetException(editorId, "Cannot find user with id " + editorId);
         }
 
-        throw new CannotFindTargetException(newArticle.getAuthor(), "Cannot find user with id" + newArticle.getAuthor());
+        throw new CannotFindTargetException(newArticle.getAuthor().getId(), "Cannot find user with id" + newArticle.getAuthor().getId());
     }
 
     @GetMapping("blogs/search/{value}")
