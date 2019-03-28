@@ -9,6 +9,8 @@ import 'primeflex/primeflex.css';
 
 import ArticleView from "./components/ArticleView";
 import SearchView from "./components/SearchView";
+import WriteView from "./components/WriteView";
+
 import Ribbon from './components/Ribbon';
 
 class App extends Component {
@@ -20,12 +22,16 @@ class App extends Component {
 
   getView() {
     switch (this.props.ACTIVE_MENU) {
+      case 1: {
+        return <WriteView/>
+      }
       case 2: {
         return <SearchView/>;
       }
+      default : {
+        return <ArticleView/>;
+      }
     }
-
-    return <ArticleView/>;
   }
 
   render() {
