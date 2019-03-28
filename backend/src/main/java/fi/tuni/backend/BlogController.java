@@ -30,8 +30,8 @@ public class BlogController {
         return blogRepository.findAll();
     }
 
-    @DeleteMapping("blogs/{id:\\d+}&{userId:\\d+}")
-    public ResponseEntity<Void> removeArticle(@PathVariable int id, @PathVariable int userId) {
+    @DeleteMapping("blogs/{id:\\d+}")
+    public ResponseEntity<Void> removeArticle(@PathVariable int id, @RequestParam int userId) {
         try {
             Optional<User> user = userRepository.findById(userId);
 
