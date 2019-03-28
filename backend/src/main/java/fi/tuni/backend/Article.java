@@ -1,10 +1,8 @@
 package fi.tuni.backend;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.Set;
 
 @Entity
 public class Article {
@@ -21,21 +19,25 @@ public class Article {
     @Column(length = 10000)
     private String content;
 
-    @Column
-    private int authorId;
+    @ManyToOne
+    @JoinColumn
+    private User author;
 
-    public Article(String title, String content, int author) {
+    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
+    private Set<Comment> comments;
+
+    public Article(String title, String content, User author) {
         this(LocalDate.now(), title, content, author);
     }
 
-    public Article(LocalDate date, String title, String content, int author) {
+    public Article(LocalDate date, String title, String content, User author) {
         setDate(date);
         setTitle(title);
         setContent(content);
         setAuthor(author);
     }
 
-    public Article(int id, LocalDate date, String title, String content, int author) {
+    public Article(int id, LocalDate date, String title, String content, User author) {
         setDate(date);
         setTitle(title);
         setContent(content);
@@ -64,12 +66,12 @@ public class Article {
         this.content = content;
     }
 
-    public int getAuthor() {
-        return authorId;
+    public User getAuthor() {
+        return author;
     }
 
-    public void setAuthor(int author) {
-        this.authorId = author;
+    public void setAuthor(User author) {
+        this.author = author;
     }
 
     public LocalDate getDate() {
@@ -82,6 +84,6 @@ public class Article {
 
     @Override
     public String toString() {
-        return "{AuthorID: " + authorId + " Date: " + date +  " Title: " + title + " Content: " + content + "}";
+        return String.format("{Id: %d, AuthorId: %d, Title: \"%s\", Content: \"%s\"}", id, author.getId(), title, content);
     }
 }
