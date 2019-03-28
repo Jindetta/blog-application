@@ -24,8 +24,8 @@ public class Article {
     @Column
     private int authorId;
 
-    public Article(String title, String content, int authorId) {
-        this(LocalDate.now(), title, content, authorId);
+    public Article(String title, String content, int author) {
+        this(LocalDate.now(), title, content, author);
     }
 
     public Article(LocalDate date, String title, String content, int author) {

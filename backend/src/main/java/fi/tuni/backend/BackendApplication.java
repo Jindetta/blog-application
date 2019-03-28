@@ -22,10 +22,10 @@ public class BackendApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-	    User user1 = new User("Tuukka", "Juusela");
+	    User user1 = new User("Tuukka", "Juusela", true);
         User user2 = new User("Taneli", "Taikina");
         User user3 = new User("Maikki", "Manaaja");
-        User user4 = new User("Joonas", "Lauhala");
+        User user4 = new User("Joonas", "Lauhala", true);
 	    userRepository.save(user1);
 	    userRepository.save(user2);
         userRepository.save(user3);

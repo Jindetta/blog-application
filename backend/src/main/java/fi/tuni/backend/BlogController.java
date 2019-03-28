@@ -17,6 +17,9 @@ public class BlogController {
     @Autowired
     BlogRepository blogRepository;
 
+    @Autowired
+    UserRepository userRepository;
+
     @GetMapping("blogs/{id:\\d}")
     public Article getArticle(@PathVariable int id) {
         return blogRepository.findById(id).orElseThrow(() -> new CannotFindTargetException(id, "Cannot find article with id:" + id));
@@ -27,25 +30,40 @@ public class BlogController {
         return blogRepository.findAll();
     }
 
-    @DeleteMapping("blogs/{id:\\d}")
-    public ResponseEntity<Void> removeArticle(@PathVariable int id) {
+    @DeleteMapping("blogs/{id:\\d+}")
+    public ResponseEntity<Void> removeArticle(@PathVariable int id, @RequestParam int userId) {
         try {
-            blogRepository.deleteById(id);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            Optional<User> user = userRepository.findById(userId);
+
+            if(user.isPresent()) {
+                if(user.get().isAdmin()) {
+                    blogRepository.deleteById(id);
+                    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+                }
+
+                throw new UserNotAdminException("Forbidden action, user with id " + userId + " is not admin");
+            } else {
+                throw new CannotFindTargetException(userId, "Cannot find user with id " + userId);
+            }
+
         } catch (EmptyResultDataAccessException e) {
             throw new CannotFindTargetException(id, "Cannot find article with id:" + id);
         }
     }
 
     @PostMapping("blogs")
-    public ResponseEntity<Void> addArticle(@RequestParam String title,
-                           @RequestParam int authorId,
-                           @RequestParam String content,
-                           UriComponentsBuilder builder) {
-        Article article = new Article(title,content,authorId);
-        blogRepository.save(article);
+    public ResponseEntity<Void> addArticle(Article article, UriComponentsBuilder builder) {
+        Optional<User> user = userRepository.findById(article.getAuthor());
 
-        return getVoidResponseEntity(builder, article, HttpStatus.CREATED);
+        if(user.isPresent()) {
+            if(user.get().isAdmin()) {
+                blogRepository.save(article);
+                return getVoidResponseEntity(builder, article, HttpStatus.CREATED);
+            }
+
+            throw new UserNotAdminException("Forbidden action, user with id " + article.getAuthor() + " is not a admin");
+        }
+        throw new CannotFindTargetException(article.getAuthor(), "Cannot find user with id:" + article.getAuthor());
     }
 
     private ResponseEntity<Void> getVoidResponseEntity(UriComponentsBuilder builder, Article article, HttpStatus status) {
@@ -58,22 +76,38 @@ public class BlogController {
     }
 
     @PostMapping("blogs/edit/{id:\\d}")
-    public ResponseEntity<Void> editBlog(@PathVariable int id,
-                                        @RequestParam String title,
-                                        @RequestParam int authorId,
-                                        @RequestParam String content,
-                                        UriComponentsBuilder builder) {
+    public ResponseEntity<Void> editBlog(@PathVariable int id, Article newArticle, @RequestParam int editorId, UriComponentsBuilder builder) {
+
         Optional<Article> optionalArticle = blogRepository.findById(id);
-        if(optionalArticle.isPresent()) {
-            Article article = optionalArticle.get();
-            article.setTitle(title);
-            article.setAuthor(authorId);
-            article.setContent(content);
-            blogRepository.save(article);
-            return getVoidResponseEntity(builder, article, HttpStatus.CREATED);
-        } else {
-            throw new CannotFindTargetException(id, "Couldn't modify id " + id + " because it doesn't exist");
+        Optional<User> optionalUser = userRepository.findById(newArticle.getAuthor());
+        Optional<User> optionalEditor = userRepository.findById(editorId);
+
+        if(optionalUser.isPresent()) {
+            if(optionalEditor.isPresent()) {
+                if (optionalEditor.get().isAdmin()) {
+                    if (optionalArticle.isPresent()) {
+
+                        Article article = optionalArticle.get();
+
+                        article.setTitle(newArticle.getTitle());
+                        article.setAuthor(newArticle.getAuthor());
+                        article.setContent(newArticle.getContent());
+
+                        blogRepository.save(article);
+
+                        return getVoidResponseEntity(builder, article, HttpStatus.CREATED);
+                    }
+
+                    throw new CannotFindTargetException(id, "Couldn't modify id " + id + " because it doesn't exist");
+                }
+
+                throw new UserNotAdminException("Forbidden action, user with id " + editorId + " is not a admin");
+            }
+
+            throw new CannotFindTargetException(editorId, "Cannot find user with id " + editorId);
         }
+
+        throw new CannotFindTargetException(newArticle.getAuthor(), "Cannot find user with id" + newArticle.getAuthor());
     }
 
     @GetMapping("blogs/search/{value}")
