@@ -17,6 +17,9 @@ public class BlogController {
     @Autowired
     BlogRepository blogRepository;
 
+    @Autowired
+    UserRepository userRepository;
+
     @GetMapping("blogs/{id:\\d}")
     public Article getArticle(@PathVariable int id) {
         return blogRepository.findById(id).orElseThrow(() -> new CannotFindTargetException(id, "Cannot find article with id:" + id));
@@ -27,11 +30,22 @@ public class BlogController {
         return blogRepository.findAll();
     }
 
-    @DeleteMapping("blogs/{id:\\d}")
-    public ResponseEntity<Void> removeArticle(@PathVariable int id) {
+    @DeleteMapping("blogs/{id:\\d+}&{userId:\\d+}")
+    public ResponseEntity<Void> removeArticle(@PathVariable int id, @PathVariable int userId) {
         try {
-            blogRepository.deleteById(id);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            Optional<User> user = userRepository.findById(userId);
+
+            if(user.isPresent()) {
+                if(user.get().isAdmin()) {
+                    blogRepository.deleteById(id);
+                    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+                }
+
+                throw new UserNotAdminException("Forbidden action, user with id " + userId + " is not admin");
+            } else {
+                throw new CannotFindTargetException(userId, "Cannot find user with id " + userId);
+            }
+
         } catch (EmptyResultDataAccessException e) {
             throw new CannotFindTargetException(id, "Cannot find article with id:" + id);
         }
