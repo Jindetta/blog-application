@@ -1,9 +1,7 @@
 package fi.tuni.backend;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 public class User {
@@ -19,6 +17,12 @@ public class User {
 
     @Column
     private boolean admin;
+
+    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
+    private Set<Comment> comments;
+
+    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
+    private Set<Article> articles;
 
     public int getId() {
         return id;
@@ -63,6 +67,6 @@ public class User {
 
     @Override
     public String toString() {
-        return "{firstName: "+ firstName + ", lastName: " + lastName + "}";
+        return String.format("{Id: %d, Admin: %b, Firstname: %s, Lastname: %s}", id, admin, firstName, lastName);
     }
 }
