@@ -13,6 +13,8 @@ import WriteView from "./components/WriteView";
 
 import Ribbon from './components/Ribbon';
 
+import {HashRouter, Route, Switch} from 'react-router-dom';
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -36,18 +38,24 @@ class App extends Component {
 
   render() {
     return (
-      <div>
-        <div className="p-grid p-justify-center">
-          <div className="p-col-10">
-            <Ribbon/>
+      <HashRouter>
+        <div>
+          <div className="p-grid p-justify-center">
+            <div className="p-col-10">
+              <Ribbon/>
+            </div>
+          </div>
+          <div className="p-grid p-justify-center">
+            <div className="p-col-10">
+              <Switch>
+                <Route path="/write" component={WriteView}/>
+                <Route path="/search" component={SearchView}/>
+                <Route path="/" component={ArticleView}/>
+              </Switch>
+            </div>
           </div>
         </div>
-        <div className="p-grid p-justify-center">
-          <div className="p-col-10">
-            {this.getView()}
-          </div>
-        </div>
-      </div>
+      </HashRouter>
     );
   }
 }
