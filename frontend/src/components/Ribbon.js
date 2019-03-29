@@ -16,6 +16,7 @@ class Ribbon extends Component {
 
   clickMenuTab(event) {
     window.location = `/#/${event.value.label.toLowerCase()}`
+    this.props.dispatch(actions.switchMenu(event.value.index));
   }
 
   ribbonItems() {
