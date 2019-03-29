@@ -10,10 +10,12 @@ import 'primeflex/primeflex.css';
 import ArticleView from "./components/ArticleView";
 import SearchView from "./components/SearchView";
 import WriteView from "./components/WriteView";
+import  "./components/BlogView";
 
 import Ribbon from './components/Ribbon';
 
 import {HashRouter, Route, Switch} from 'react-router-dom';
+import BlogView from "./components/BlogView";
 
 class App extends Component {
   constructor(props) {
@@ -32,9 +34,10 @@ class App extends Component {
           <div className="p-grid p-justify-center">
             <div className="p-col-10">
               <Switch>
+                <Route path="/articles/:id" component={ArticleView}/>
                 <Route path="/write" component={WriteView}/>
                 <Route path="/search" component={SearchView}/>
-                <Route path="/" component={ArticleView}/>
+                <Route path="/" component={BlogView}/>
               </Switch>
             </div>
           </div>
