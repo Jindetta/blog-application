@@ -3,7 +3,7 @@ package fi.tuni.backend;
 import javax.persistence.*;
 
 @Entity
-public class User {
+public class User implements HateoasInterface {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
@@ -56,6 +56,11 @@ public class User {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    @Override
+    public String getLink() {
+        return String.format("/users/%d", id);
     }
 
     @Override
