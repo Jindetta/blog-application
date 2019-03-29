@@ -8,7 +8,7 @@ import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-public class Article {
+public class Article implements HateoasInterface {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
@@ -82,6 +82,11 @@ public class Article {
 
     public void setDate(LocalDate date) {
         this.date = date;
+    }
+
+    @Override
+    public String getLink() {
+        return String.format("/blogs/%d", id);
     }
 
     @Override
