@@ -131,6 +131,11 @@ public class BlogController {
         return commentRepository.findByArticleId(articleId);
     }
 
+    @GetMapping("/blpgs/comments/{commentId:\\d+}")
+    public Comment getComment(@PathVariable int commentId) {
+        return commentRepository.findById(commentId).orElse(null);
+    }
+
     @GetMapping("/blogs/comments")
     public Iterable<Comment> getComments() {
         return commentRepository.findAll();
