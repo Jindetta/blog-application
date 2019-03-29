@@ -7,6 +7,7 @@ import * as actions from '../actions/ArticleActions';
 import Loader from './Loader';
 
 import './ArticleView.css';
+import {Button} from "primereact/button";
 
 class BlogView extends Component {
   constructor(props) {
@@ -36,8 +37,15 @@ class BlogView extends Component {
     }
 
     return (
-      <div key={data.id} className="article">
-        <h1>{data.title}</h1>
+      <div key={data.id}>
+        <div className="p-grid p-align-center ">
+          <div className="p-col-9">
+            <h1>{data.title}</h1>
+          </div>
+          <div className="p-col-3">
+            <Button label="Go to article" icon="pi pi-arrow-right" iconPos="right" className="p-button-secondary" onClick={e => window.location = `/#/articles/${data.id}`}/>
+          </div>
+        </div>
         <p>{data.content}</p>
       </div>
     );
@@ -58,7 +66,7 @@ class BlogView extends Component {
   }
 
   render() {
-    return <div id="page">{this.getContent()}</div>;
+    return <div className="p-col-12" id="page">{this.getContent()}</div>;
   }
 
   static getErrorMessage(data) {
