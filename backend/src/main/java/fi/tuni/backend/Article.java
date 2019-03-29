@@ -1,13 +1,16 @@
 package fi.tuni.backend;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.Set;
 
 @Entity
 public class Article {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
     @Column
@@ -19,12 +22,11 @@ public class Article {
     @Column(length = 10000)
     private String content;
 
-    @ManyToOne
-    @JoinColumn
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "author_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonIgnore
     private User author;
-
-    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
-    private Set<Comment> comments;
 
     public Article(String title, String content, User author) {
         this(LocalDate.now(), title, content, author);
