@@ -4,6 +4,8 @@ import {InputText} from "primereact/inputtext";
 import {Editor} from "primereact/editor";
 import {Button} from "primereact/button";
 
+import './WriteView.css';
+
 class WriteView extends Component {
   constructor(props) {
     super(props);
@@ -32,9 +34,6 @@ class WriteView extends Component {
           </div>
           <div className="p-col-12 p-md-12">
             <div className="p-inputgroup">
-              <span className="p-inputgroup-addon">
-                  <i className="pi pi-pencil"></i>
-              </span>
               <InputText placeholder="Title" value={this.state.title} onChange={e => this.setState({title: e.target.value})}/>
             </div>
           </div>
@@ -43,6 +42,8 @@ class WriteView extends Component {
           </div>
           <div className="p-col-12 p-md-12">
             <Editor headerTemplate={this.renderHeader()} style={{height:'250pt'}} value={this.state.content} onTextChange={(e)=>this.setState({content:e.textValue})}/>
+          </div>
+          <div className="p-col-12 p-md-12">
             <Button label="Clear" icon="pi pi-times" onClick={() => this.setState({content:''})}/>
             <Button label="Post" icon="pi pi-pencil" onClick={() => console.log("POSTED " + this.state.title)}/>
           </div>
