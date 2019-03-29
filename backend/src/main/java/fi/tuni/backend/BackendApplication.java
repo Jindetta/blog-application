@@ -52,7 +52,9 @@ public class BackendApplication implements CommandLineRunner {
 	    blogRepository.saveAll(articles);
 
 	    List<Comment> comments = Stream.of(
-            new Comment(users.get(3), articles.get(1), "Tämä on kiva peli")
+            new Comment(users.get(3), articles.get(1), "Tämä on kiva peli"),
+            new Comment(users.get(1), articles.get(0), "Niin hyvää!"),
+            new Comment(users.get(0), articles.get(3), "Heh")
         ).collect(Collectors.toList());
 
         commentRepository.saveAll(comments);
