@@ -9,11 +9,13 @@ import './WriteView.css';
 class WriteView extends Component {
   constructor(props) {
     super(props);
+
     this.state = {title: "", content: ""};
-    this.setState(this.state);
 
     this.renderHeader = this.renderHeader.bind(this);
+    this.postData = this.postData.bind(this);
   }
+
   renderHeader() {
     return (
       <span className="ql-formats">
@@ -24,8 +26,22 @@ class WriteView extends Component {
     );
   }
 
+  postData(url = '') {
+    let data = new FormData();
+    data.append("title", this.state.title);
+    data.append("content", this.state.content);
+    data.append("author", 1);
+
+    fetch(url, {
+      method:"POST",
+      mode: "cors",
+      credentials:"omit",
+      body: data
+    }).then(response => console.log(response))
+      .catch(error => console.log(error));
+  }
+
   render() {
-    console.log(this.state.title)
     return (
       <div id="page">
         <div className="p-grid p-justify-center">
@@ -45,7 +61,7 @@ class WriteView extends Component {
           </div>
           <div className="p-col-12 p-md-12">
             <Button label="Clear" icon="pi pi-times" onClick={() => this.setState({content:''})}/>
-            <Button label="Post" icon="pi pi-pencil" onClick={() => console.log("POSTED " + this.state.title)}/>
+            <Button label="Post" icon="pi pi-pencil" onClick={() => this.postData("http://localhost:8080/blogs")}/>
           </div>
         </div>
       </div>
