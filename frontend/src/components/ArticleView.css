@@ -6,3 +6,11 @@
     margin-top: 2em;
     padding: 2em;
 }
+
+#page .article {
+    border-bottom: double grey;
+}
+
+#page .article:last-child {
+    border-bottom: none;
+}

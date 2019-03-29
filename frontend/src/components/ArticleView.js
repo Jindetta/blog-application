@@ -51,24 +51,8 @@ class ArticleView extends Component {
       return error;
     }
 
-    /*if(authorData != null) {
-      return (
-        <div>
-          <h1>{blogData.title + " / " + authorData.firstName + " " + authorData.lastName}</h1>
-          <h3>{blogData.content}</h3>
-        </div>
-      );
-    } else {
-      return(
-        <div>
-          <h1>{blogData.title + " fetching author..."}</h1>
-          <h3>{blogData.content}</h3>
-        </div>
-      );
-    }*/
-
     return (
-      <div key={data.id}>
+      <div key={data.id} className="article">
         <h1>{data.title}</h1>
         <p>{data.content}</p>
       </div>
@@ -90,7 +74,7 @@ class ArticleView extends Component {
   }
 
   render() {
-    return this.getContent();
+    return <div id="page">{this.getContent()}</div>;
   }
 
   static getErrorMessage(data) {
