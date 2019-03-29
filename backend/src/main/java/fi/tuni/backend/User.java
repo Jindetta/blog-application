@@ -1,12 +1,11 @@
 package fi.tuni.backend;
 
 import javax.persistence.*;
-import java.util.Set;
 
 @Entity
 public class User {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
     @Column
@@ -17,12 +16,6 @@ public class User {
 
     @Column
     private boolean admin;
-
-    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
-    private Set<Comment> comments;
-
-    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
-    private Set<Article> articles;
 
     public int getId() {
         return id;
