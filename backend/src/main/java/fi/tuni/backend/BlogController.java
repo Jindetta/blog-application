@@ -1,5 +1,6 @@
 package fi.tuni.backend;
 
+import org.springframework.context.annotation.Scope;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpHeaders;
@@ -12,6 +13,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.util.Optional;
 
 @RestController
+@Scope("session")
 public class BlogController {
 
     @Autowired
@@ -20,7 +22,10 @@ public class BlogController {
     @Autowired
     UserRepository userRepository;
 
-    @GetMapping("blogs/{id:\\d}")
+    @Autowired
+    CommentRepository commentRepository;
+
+    @GetMapping("blogs/{id:\\d+}")
     public Article getArticle(@PathVariable int id) {
         return blogRepository.findById(id).orElseThrow(() -> new CannotFindTargetException(id, "Cannot find article with id:" + id));
     }
@@ -75,7 +80,7 @@ public class BlogController {
         return new ResponseEntity<Void>(header, status);
     }
 
-    @PostMapping("blogs/edit/{id:\\d}")
+    @PostMapping("blogs/edit/{id:\\d+}")
     public ResponseEntity<Void> editBlog(@PathVariable int id, Article newArticle, @RequestParam int editorId, UriComponentsBuilder builder) {
 
         Optional<Article> optionalArticle = blogRepository.findById(id);
@@ -113,5 +118,21 @@ public class BlogController {
     @GetMapping("blogs/search/{value}")
     public Iterable<Article> searchPost(@PathVariable String value) {
         return blogRepository.findArticlesByTitleContainingIgnoreCaseOrContentContainingIgnoreCase(value,value);
+    }
+
+    @PostMapping("/blogs/comments")
+    public ResponseEntity<Void> addComment(@RequestParam Comment comment) {
+        commentRepository.save(comment);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @GetMapping("/blogs/{articleId:\\d+}/comments")
+    public Iterable<Comment> getBlogComments(@PathVariable int articleId) {
+        return commentRepository.findByArticleId(articleId);
+    }
+
+    @GetMapping("/blogs/comments")
+    public Iterable<Comment> getComments() {
+        return commentRepository.findAll();
     }
 }
