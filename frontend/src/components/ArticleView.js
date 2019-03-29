@@ -15,10 +15,7 @@ class ArticleView extends Component {
     this.getContent = this.getContent.bind(this);
     this.fetchUserData = this.fetchUserData.bind(this);
     this.renderArticle = this.renderArticle.bind(this);
-
-    let path = window.location.pathname;
-    let pattern = /\/article\//g;
-    this.number = path.replace(pattern, "");
+    this.fetchAllData = this.fetchAllData.bind(this);
 
     if (process.env.NODE_ENV === "development") {
       this.fetchUrl = "http://localhost:8080";
@@ -28,7 +25,11 @@ class ArticleView extends Component {
   }
 
   componentWillMount() {
-    fetch(`${this.fetchUrl}/blogs/${this.number}`)
+    this.fetchAllData();
+  }
+
+  fetchAllData() {
+    fetch(`${this.fetchUrl}/blogs/${this.props.match.params.id}`)
       .then(response => response.json())
       .then(data => this.props.dispatch(actions.setBlogData(data)))
       .then(() => this.fetchUserData());
@@ -63,14 +64,19 @@ class ArticleView extends Component {
     const blogData = this.props.BLOG_DATA;
 
     if(blogData != null) {
-      if (Array.isArray(blogData)) {
-        return blogData.map(blogEntry => this.renderArticle(blogEntry));
-      } else {
-        return this.renderArticle(blogData);
-      }
+      return this.renderArticle(blogData);
     }
 
     return <Loader text="Fetching data..." />;
+  }
+
+  componentDidUpdate(previousProps) {
+    const currentSearch = this.props.match.params.id
+    const previousSearch = previousProps.match.params.id
+    if (currentSearch !== previousSearch) {
+      console.log("Im updated")
+      this.fetchAllData()
+    }
   }
 
   render() {
