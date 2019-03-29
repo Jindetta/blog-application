@@ -18,22 +18,6 @@ import {HashRouter, Route, Switch} from 'react-router-dom';
 class App extends Component {
   constructor(props) {
     super(props);
-
-    this.getView = this.getView.bind(this);
-  }
-
-  getView() {
-    switch (this.props.ACTIVE_MENU) {
-      case 1: {
-        return <WriteView/>
-      }
-      case 2: {
-        return <SearchView/>;
-      }
-      default : {
-        return <ArticleView/>;
-      }
-    }
   }
 
   render() {
