@@ -72,6 +72,10 @@ public class Article implements HateoasInterface {
         return author;
     }
 
+    public int getAuthor_id() {
+        return author.getId();
+    }
+
     public void setAuthor(User author) {
         this.author = author;
     }

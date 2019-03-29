@@ -48,12 +48,20 @@ public class Comment implements HateoasInterface {
         return author;
     }
 
+    public int getAuthor_id() {
+        return author.getId();
+    }
+
     public void setAuthor(User author) {
         this.author = author;
     }
 
     public Article getArticle() {
         return article;
+    }
+
+    public int getArticle_id() {
+        return article.getId();
     }
 
     public void setArticle(Article article) {
