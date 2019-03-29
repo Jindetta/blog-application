@@ -30,7 +30,7 @@ public class UserController {
         return new ResponseEntity<Void>(header, HttpStatus.CREATED);
     }
 
-    @DeleteMapping("users/{id:\\d}")
+    @DeleteMapping("users/{id:\\d+}")
     public ResponseEntity<Void> removeUser(@PathVariable int id, UriComponentsBuilder builder) {
         try {
             userRepository.deleteById(id);
@@ -40,7 +40,7 @@ public class UserController {
         }
     }
 
-    @GetMapping("users/{id:\\d}")
+    @GetMapping("users/{id:\\d+}")
     public User getUser(@PathVariable int id) {
         return userRepository.findById(id).orElseThrow(() -> new CannotFindTargetException(id, "Cannot find user with id  " +  id));
     }
