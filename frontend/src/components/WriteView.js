@@ -31,7 +31,7 @@ class WriteView extends Component {
     data.append("title", this.state.title);
     data.append("content", this.state.content);
     data.append("author", 1);
-
+    //TODO Change author to be logged user
     fetch(url, {
       method:"POST",
       mode: "cors",
