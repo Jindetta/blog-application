@@ -70,7 +70,7 @@ class ArticleView extends Component {
     return (
       <div key={data.id}>
         <h1>{data.title}</h1>
-        <h3>{data.content}</h3>
+        <p>{data.content}</p>
       </div>
     );
   }
