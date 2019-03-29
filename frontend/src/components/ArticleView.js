@@ -74,7 +74,6 @@ class ArticleView extends Component {
     const currentSearch = this.props.match.params.id
     const previousSearch = previousProps.match.params.id
     if (currentSearch !== previousSearch) {
-      console.log("Im updated")
       this.fetchAllData()
     }
   }
