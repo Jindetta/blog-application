@@ -6,6 +6,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -20,6 +21,7 @@ public class UserController {
     @Autowired
     CommentRepository commentRepository;
 
+    @Secured("ROLE_ADMIN")
     @PostMapping("users")
     public ResponseEntity<Void> addUser(User u, UriComponentsBuilder builder) {
         userRepository.save(u);
@@ -30,6 +32,7 @@ public class UserController {
         return new ResponseEntity<Void>(header, HttpStatus.CREATED);
     }
 
+    @Secured("ROLE_ADMIN")
     @DeleteMapping("users/{id:\\d+}")
     public ResponseEntity<Void> removeUser(@PathVariable int id, UriComponentsBuilder builder) {
         try {

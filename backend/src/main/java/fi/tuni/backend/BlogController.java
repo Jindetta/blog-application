@@ -6,6 +6,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -35,6 +36,7 @@ public class BlogController {
         return blogRepository.findAll();
     }
 
+    @Secured("ROLE_ADMIN")
     @DeleteMapping("blogs/{id:\\d+}")
     public ResponseEntity<Void> removeArticle(@PathVariable int id, @RequestParam int userId) {
         try {
@@ -56,6 +58,7 @@ public class BlogController {
         }
     }
 
+    @Secured("ROLE_ADMIN")
     @PostMapping("blogs")
     public ResponseEntity<Void> addArticle(Article article, UriComponentsBuilder builder) {
         Optional<User> user = userRepository.findById(article.getAuthor().getId());
@@ -80,6 +83,7 @@ public class BlogController {
         return new ResponseEntity<Void>(header, status);
     }
 
+    @Secured("ROLE_ADMIN")
     @PostMapping("blogs/edit/{id:\\d+}")
     public ResponseEntity<Void> editBlog(@PathVariable int id, Article newArticle, @RequestParam int editorId, UriComponentsBuilder builder) {
 
