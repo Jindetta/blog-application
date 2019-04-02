@@ -32,7 +32,7 @@ class SearchView extends Component{
       <AccordionTab header={post.title + " / " + post.date} key={post.id}>
         {post.content}
         <br/><br/>
-        <Button label="Go to post" onClick={event => console.log("Should move to this post: ", post)}/>
+        <Button label="Go to post" onClick={() => window.location.href = window.location.origin+"/#/articles/"+post.id}/>
       </AccordionTab>
     );
   }
