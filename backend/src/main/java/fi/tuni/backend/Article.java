@@ -1,15 +1,16 @@
 package fi.tuni.backend;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
+import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-public class Article {
+public class Article implements HateoasInterface {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
     @Column
@@ -21,21 +22,24 @@ public class Article {
     @Column(length = 10000)
     private String content;
 
-    @Column
-    private int authorId;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "author_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonIgnore
+    private User author;
 
-    public Article(String title, String content, int authorId) {
-        this(LocalDate.now(), title, content, authorId);
+    public Article(String title, String content, User author) {
+        this(LocalDate.now(), title, content, author);
     }
 
-    public Article(LocalDate date, String title, String content, int author) {
+    public Article(LocalDate date, String title, String content, User author) {
         setDate(date);
         setTitle(title);
         setContent(content);
         setAuthor(author);
     }
 
-    public Article(int id, LocalDate date, String title, String content, int author) {
+    public Article(int id, LocalDate date, String title, String content, User author) {
         setDate(date);
         setTitle(title);
         setContent(content);
@@ -64,12 +68,16 @@ public class Article {
         this.content = content;
     }
 
-    public int getAuthor() {
-        return authorId;
+    public User getAuthor() {
+        return author;
     }
 
-    public void setAuthor(int author) {
-        this.authorId = author;
+    public int getAuthor_id() {
+        return author.getId();
+    }
+
+    public void setAuthor(User author) {
+        this.author = author;
     }
 
     public LocalDate getDate() {
@@ -81,7 +89,12 @@ public class Article {
     }
 
     @Override
+    public String getLink() {
+        return String.format("/blogs/%d", id);
+    }
+
+    @Override
     public String toString() {
-        return "{AuthorID: " + authorId + " Date: " + date +  " Title: " + title + " Content: " + content + "}";
+        return String.format("{Id: %d, AuthorId: %d, Title: \"%s\", Content: \"%s\"}", id, author.getId(), title, content);
     }
 }

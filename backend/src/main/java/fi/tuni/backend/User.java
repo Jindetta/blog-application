@@ -1,14 +1,11 @@
 package fi.tuni.backend;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
-public class User {
+public class User implements HateoasInterface {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
     @Column
@@ -17,6 +14,9 @@ public class User {
     @Column
     private String lastName;
 
+    @Column
+    private boolean admin;
+
     public int getId() {
         return id;
     }
@@ -24,6 +24,20 @@ public class User {
     public User(String firstName, String lastName) {
         setFirstName(firstName);
         setLastName(lastName);
+    }
+
+    public User(String firstName, String lastName, boolean admin) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.admin = admin;
+    }
+
+    public boolean isAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(boolean admin) {
+        this.admin = admin;
     }
 
     public User(){}
@@ -45,7 +59,12 @@ public class User {
     }
 
     @Override
+    public String getLink() {
+        return String.format("/users/%d", id);
+    }
+
+    @Override
     public String toString() {
-        return "{firstName: "+ firstName + ", lastName: " + lastName + "}";
+        return String.format("{Id: %d, Admin: %b, Firstname: %s, Lastname: %s}", id, admin, firstName, lastName);
     }
 }
