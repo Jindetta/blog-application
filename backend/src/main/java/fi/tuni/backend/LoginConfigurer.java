@@ -20,7 +20,16 @@ public class LoginConfigurer extends WebSecurityConfigurerAdapter {
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.inMemoryAuthentication()
-                .withUser("user1").password(passwordEncoder().encode("user1Pass"))
+                .withUser("tuksu").password(passwordEncoder().encode("juksu"))
+                .authorities("ROLE_ADMIN");
+        auth.inMemoryAuthentication()
+                .withUser("jintsu").password(passwordEncoder().encode("dintsu"))
+                .authorities("ROLE_ADMIN");
+        auth.inMemoryAuthentication()
+                .withUser("taneli").password(passwordEncoder().encode("taikina"))
+                .authorities("ROLE_USER");
+        auth.inMemoryAuthentication()
+                .withUser("maikki").password(passwordEncoder().encode("manaaja"))
                 .authorities("ROLE_USER");
     }
 
