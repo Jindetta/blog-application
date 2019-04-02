@@ -11,3 +11,10 @@ export function setAuthorData(value) {
     payload: value
   }
 }
+
+export function setCommentData(value) {
+  return {
+    type: "COMMENT_DATA",
+    payload: value
+  }
+}
