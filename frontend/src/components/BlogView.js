@@ -7,15 +7,14 @@ import * as actions from '../actions/ArticleActions';
 import Loader from './Loader';
 
 import './ArticleView.css';
+import {Button} from "primereact/button";
 
-class ArticleView extends Component {
+class BlogView extends Component {
   constructor(props) {
     super(props);
 
     this.getContent = this.getContent.bind(this);
-    this.fetchUserData = this.fetchUserData.bind(this);
     this.renderArticle = this.renderArticle.bind(this);
-    this.fetchAllData = this.fetchAllData.bind(this);
 
     if (process.env.NODE_ENV === "development") {
       this.fetchUrl = "http://localhost:8080";
@@ -25,36 +24,28 @@ class ArticleView extends Component {
   }
 
   componentWillMount() {
-    this.fetchAllData();
-  }
-
-  fetchAllData() {
-    fetch(`${this.fetchUrl}/blogs/${this.props.match.params.id}`)
+    fetch(`${this.fetchUrl}/blogs/`)
       .then(response => response.json())
-      .then(data => this.props.dispatch(actions.setBlogData(data)))
-      .then(() => this.fetchUserData());
-  }
-
-  fetchUserData(userData) {
-    if(userData) {
-      return this.props.AUTHOR_DATA.filter(item => item.id === userData.id);
-    } else {
-      fetch(`${this.fetchUrl}/users`)
-        .then(response => response.json())
-        .then(data => this.props.dispatch(actions.setAuthorData(data)));
-    }
+      .then(data => this.props.dispatch(actions.setBlogData(data)));
   }
 
   renderArticle(data) {
-    const error = ArticleView.getErrorMessage(data);
+    const error = BlogView.getErrorMessage(data);
 
     if (error) {
       return error;
     }
 
     return (
-      <div key={data.id} className="article">
-        <h1>{data.title}</h1>
+      <div key={data.id}>
+        <div className="p-grid p-align-center ">
+          <div className="p-col-9">
+            <h1>{data.title}</h1>
+          </div>
+          <div className="p-col-3">
+            <Button label="Go to article" icon="pi pi-arrow-right" iconPos="right" className="p-button-secondary" onClick={e => window.location = `/#/articles/${data.id}`}/>
+          </div>
+        </div>
         <p>{data.content}</p>
       </div>
     );
@@ -64,22 +55,18 @@ class ArticleView extends Component {
     const blogData = this.props.BLOG_DATA;
 
     if(blogData != null) {
-      return this.renderArticle(blogData);
+      if (Array.isArray(blogData)) {
+        return blogData.map(blogEntry => this.renderArticle(blogEntry));
+      } else {
+        return this.renderArticle(blogData);
+      }
     }
 
     return <Loader text="Fetching data..." />;
   }
 
-  componentDidUpdate(previousProps) {
-    const currentSearch = this.props.match.params.id
-    const previousSearch = previousProps.match.params.id
-    if (currentSearch !== previousSearch) {
-      this.fetchAllData()
-    }
-  }
-
   render() {
-    return <div id="page">{this.getContent()}</div>;
+    return <div className="p-col-12" id="page">{this.getContent()}</div>;
   }
 
   static getErrorMessage(data) {
@@ -95,4 +82,4 @@ class ArticleView extends Component {
   }
 }
 
-export default connect(data => data.article)(ArticleView);
+export default connect(data => data.blog)(BlogView);

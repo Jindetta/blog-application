@@ -1,6 +1,6 @@
 const DEFAULT_STATE = {
-  BLOG_DATA: null,
-  AUTHOR_DATA: null
+  SEARCH_VALUE: '',
+  POSTS: ''
 };
 
 export default (state = DEFAULT_STATE, action) => {
