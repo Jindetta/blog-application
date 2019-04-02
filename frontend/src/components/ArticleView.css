@@ -7,6 +7,13 @@
     padding: 2em;
 }
 
+#page .comment {
+    border-radius: 2pt;
+    box-shadow: 0pt 0pt 1pt 0pt gray;
+    border-top: 1pt solid gray;
+    padding: 0.5em;
+}
+
 #page .article {
     border-bottom: double grey;
 }
