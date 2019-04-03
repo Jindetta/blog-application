@@ -10,6 +10,8 @@ import 'primeflex/primeflex.css';
 import ArticleView from "./components/ArticleView";
 import SearchView from "./components/SearchView";
 import WriteView from "./components/WriteView";
+import EditView from "./components/EditView";
+
 import  "./components/BlogView";
 
 import Ribbon from './components/Ribbon';
@@ -36,6 +38,7 @@ class App extends Component {
               <Switch>
                 <Route path="/articles/:id" component={ArticleView}/>
                 <Route path="/write" component={WriteView}/>
+                <Route path="/edit/:id" component={EditView}/>
                 <Route path="/search" component={SearchView}/>
                 <Route path="/" component={BlogView}/>
               </Switch>
