@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import {connect} from "react-redux";
 
+import {HashRouter, Route, Switch} from 'react-router-dom';
+
 import './App.css';
 import 'primereact/resources/themes/nova-light/theme.css';
 import 'primereact/resources/primereact.min.css';
@@ -10,22 +12,13 @@ import 'primeflex/primeflex.css';
 import ArticleView from "./components/ArticleView";
 import SearchView from "./components/SearchView";
 import WriteView from "./components/WriteView";
+import BlogView from "./components/BlogView";
 import EditView from "./components/EditView";
-
-import  "./components/BlogView";
-
 import Ribbon from './components/Ribbon';
 
-import {HashRouter, Route, Switch} from 'react-router-dom';
-import BlogView from "./components/BlogView";
-
-import * as actions from './actions/';
+import * as actions from './actions';
 
 class App extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     return (
       <HashRouter>
