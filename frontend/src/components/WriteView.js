@@ -35,7 +35,7 @@ class WriteView extends Component {
       method:"POST",
       credentials:"include",
       body: data
-    }).then(response => console.log(response))
+    }).then(response => window.location.href= `/#/articles`)
       .catch(error => console.log(error));
   }
 
