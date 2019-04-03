@@ -15,23 +15,39 @@ class Ribbon extends Component {
   }
 
   clickMenuTab(event) {
-    window.location = `/#/${event.value.label.toLowerCase()}`
-    this.props.dispatch(actions.switchMenu(event.value.index));
+    if (event.value.index === -1) {
+      // Login prompt
+      fetch(window.location.href, {credentials: 'include'})
+        .then(response => response.redirect("/loginPrompt"));
+    } else {
+      window.location = `/#/${event.value.label.toLowerCase()}`
+      this.props.dispatch(actions.switchMenu(event.value.index));
+    }
   }
 
   ribbonItems() {
-    if(this.props.permits === "ADMIN") {
-      return [
-        {index: 0, label: 'Articles', icon: 'pi pi-fw pi-home'},
-        {index: 1, label: 'Write', icon: 'pi pi-fw pi-pencil'},
-        {index: 2, label: 'Search', icon: 'pi pi-fw pi-search'},
-      ];
+    switch (this.props.permits) {
+      case 'ADMIN': {
+        return [
+          {index: 0, label: 'Articles', icon: 'pi pi-fw pi-home'},
+          {index: 1, label: 'Write', icon: 'pi pi-fw pi-pencil'},
+          {index: 2, label: 'Search', icon: 'pi pi-fw pi-search'}
+        ];
+      }
+      case 'USER': {
+        return [
+          {index: 0, label: 'Articles', icon: 'pi pi-fw pi-home'},
+          {index: 2, label: 'Search', icon: 'pi pi-fw pi-search'}
+        ];
+      }
+      default: {
+        return [
+          {index: -1, label: 'Login', icon: 'pi pi-fw pi-login'},
+          {index: 0, label: 'Articles', icon: 'pi pi-fw pi-home'},
+          {index: 2, label: 'Search', icon: 'pi pi-fw pi-search'}
+        ];
+      }
     }
-
-    return [
-      {index: 0, label: 'Articles', icon: 'pi pi-fw pi-home'},
-      {index: 2, label: 'Search', icon: 'pi pi-fw pi-search'}
-    ];
   }
 
   render() {
