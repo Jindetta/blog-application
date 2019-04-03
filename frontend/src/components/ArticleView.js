@@ -7,6 +7,8 @@ import * as actions from '../actions/ArticleActions';
 import Loader from './Loader';
 
 import './ArticleView.css';
+import {Editor} from "primereact/editor";
+import {Button} from "primereact/button";
 
 class ArticleView extends Component {
   constructor(props) {
@@ -18,6 +20,7 @@ class ArticleView extends Component {
     this.fetchAllData = this.fetchAllData.bind(this);
     this.fetchUserData = this.fetchUserData.bind(this);
 
+    this.state = {comment: ""}
     if (process.env.NODE_ENV === "development") {
       this.fetchUrl = "http://localhost:8080";
     } else {
@@ -93,8 +96,13 @@ class ArticleView extends Component {
       <div>
         {this.getContent()}
       </div>
-      <div>
-        {}
+      <div id="comment-section">
+        </div>
+      <Editor headerTemplate={<b>Comment</b>} style={{height:'80pt'}} value={this.state.comment} onTextChange={(e)=>this.setState({comment:e.textValue})}/>
+        <div>
+        <div>
+          <Button label="Comment" id="comment-button" onClick={() => console.log("Comment")}></Button>
+        </div>
       </div>
     </div>;
   }

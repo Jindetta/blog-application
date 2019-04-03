@@ -21,3 +21,13 @@
 #page .article:last-child {
     border-bottom: none;
 }
+
+#page #comment-section {
+    border-top: 3pt solid #1e90ff;
+    border-radius: 3pt;
+    padding: 5pt;
+}
+
+#page #comment-button {
+    margin-top: 5pt;
+}
