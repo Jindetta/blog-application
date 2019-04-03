@@ -45,7 +45,9 @@ public class UserController {
 
     @GetMapping("users/{id:\\d+}")
     public User getUser(@PathVariable int id) {
-        return userRepository.findById(id).orElseThrow(() -> new CannotFindTargetException(id, "Cannot find user with id  " +  id));
+        User user = userRepository.findById(id).orElseThrow(() -> new CannotFindTargetException(id, "Cannot find user with id  " +  id));
+        user.setPassword(null);
+        return user;
     }
 
     @GetMapping("/users/{authorId:\\d+}/comments")
@@ -55,6 +57,8 @@ public class UserController {
 
     @GetMapping("users")
     public Iterable<User> getUsers() {
-        return userRepository.findAll();
+        Iterable<User> users = userRepository.findAll();
+        users.forEach(user -> user.setPassword(null));
+        return users;
     }
 }
