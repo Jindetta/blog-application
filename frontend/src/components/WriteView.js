@@ -5,6 +5,7 @@ import {Editor} from "primereact/editor";
 import {Button} from "primereact/button";
 
 import './WriteView.css';
+import {connect} from "react-redux";
 
 class WriteView extends Component {
   constructor(props) {
@@ -29,31 +30,42 @@ class WriteView extends Component {
   }
 
   render() {
-    return (
-      <div id="page">
-        <div className="p-grid p-justify-center">
-          <div className="p-col-12 p-md-12">
-            <h3>Title</h3>
-          </div>
-          <div className="p-col-12 p-md-12">
-            <div className="p-inputgroup">
-              <InputText placeholder="Title" value={this.state.title} onChange={e => this.setState({title: e.target.value})}/>
+    console.log("WRITE",this.props.permits);
+    if(this.props.permits === "ADMIN")
+      return (
+        <div id="page">
+          <div className="p-grid p-justify-center">
+            <div className="p-col-12 p-md-12">
+              <h3>Title</h3>
+            </div>
+            <div className="p-col-12 p-md-12">
+              <div className="p-inputgroup">
+                <InputText placeholder="Title" value={this.state.title} onChange={e => this.setState({title: e.target.value})}/>
+              </div>
+            </div>
+            <div className="p-col-12 p-md-12">
+              <h3>Content</h3>
+            </div>
+            <div className="p-col-12 p-md-12">
+              <Editor headerTemplate={<p></p>} style={{height:'250pt'}} value={this.state.content} onTextChange={(e)=>this.setState({content:e.textValue})}/>
+            </div>
+            <div className="p-col-12 p-md-12">
+              <Button label="Clear" icon="pi pi-times" onClick={() => this.setState({content:''})}/>
+              <Button label="Post" icon="pi pi-pencil" onClick={() => this.postData("http://localhost:8080/blogs")}/>
             </div>
           </div>
-          <div className="p-col-12 p-md-12">
-            <h3>Content</h3>
-          </div>
-          <div className="p-col-12 p-md-12">
-            <Editor headerTemplate={<p></p>} style={{height:'250pt'}} value={this.state.content} onTextChange={(e)=>this.setState({content:e.textValue})}/>
-          </div>
-          <div className="p-col-12 p-md-12">
-            <Button label="Clear" icon="pi pi-times" onClick={() => this.setState({content:''})}/>
-            <Button label="Post" icon="pi pi-pencil" onClick={() => this.postData("http://localhost:8080/blogs")}/>
+        </div>
+      );
+    else {
+      return (
+        <div id="page">
+          <div className="p-grid p-justify-center">
+            <h3>You don't have required permissions</h3>
           </div>
         </div>
-      </div>
-    );
+      );
+    }
   }
 }
 
-export default WriteView;
+export default connect(data => data.global)(WriteView);
