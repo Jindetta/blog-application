@@ -15,6 +15,8 @@ class BlogView extends Component {
 
     this.getContent = this.getContent.bind(this);
     this.renderArticle = this.renderArticle.bind(this);
+    this.deleteArticle = this.deleteArticle.bind(this);
+    this.fetchData = this.fetchData.bind(this);
 
     if (process.env.NODE_ENV === "development") {
       this.fetchUrl = "http://localhost:8080";
@@ -24,6 +26,10 @@ class BlogView extends Component {
   }
 
   componentWillMount() {
+    this.fetchData();
+  }
+
+  fetchData() {
     fetch(`${this.fetchUrl}/blogs/`)
       .then(response => response.json())
       .then(data => this.props.dispatch(actions.setBlogData(data)));
@@ -43,12 +49,24 @@ class BlogView extends Component {
             <h1>{data.title}</h1>
           </div>
           <div className="p-col-3">
-            <Button label="Go to article" icon="pi pi-arrow-right" iconPos="right" className="p-button-secondary" onClick={e => window.location = `/#/articles/${data.id}`}/>
+            <Button icon="pi pi-arrow-right" className="p-button-secondary" onClick={e => window.location = `/#/articles/${data.id}`}/>
+            <Button icon="pi pi-times" className="p-button-danger" onClick={e => this.deleteArticle(data.id)}/>
+            <Button icon="pi pi-pencil" className="p-button" onClick={e => window.location.href = `/#/edit/`+data.id}/>
           </div>
         </div>
         <p>{data.content}</p>
       </div>
     );
+  }
+
+  deleteArticle(articleId) {
+    const url = window.location.origin + "/blogs/" + articleId;
+    console.log(url)
+    fetch(url,{
+      method:"DELETE",
+      credentials:"include",
+    }).then(res => console.log(res))
+      .then(this.fetchData)
   }
 
   getContent() {
