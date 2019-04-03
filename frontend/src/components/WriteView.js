@@ -30,12 +30,10 @@ class WriteView extends Component {
     let data = new FormData();
     data.append("title", this.state.title);
     data.append("content", this.state.content);
-    data.append("author", 1);
     //TODO Change author to be logged user
     fetch(url, {
       method:"POST",
-      mode: "cors",
-      credentials:"omit",
+      credentials:"include",
       body: data
     }).then(response => console.log(response))
       .catch(error => console.log(error));
