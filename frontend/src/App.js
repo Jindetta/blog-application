@@ -32,7 +32,7 @@ class App extends Component {
         <div>
           <div className="p-grid p-justify-center">
             <div className="p-col-10">
-              <Ribbon/>
+              <Ribbon permits={this.props.permits}/>
             </div>
           </div>
           <div className="p-grid p-justify-center">
@@ -53,7 +53,6 @@ class App extends Component {
 
   componentDidMount() {
     let url = window.location.origin + "/permits";
-    console.log(url)
     fetch(url).then(response => response.json()).then(data => this.props.dispatch(actions.setPermits(data.permit)))
   }
 }
