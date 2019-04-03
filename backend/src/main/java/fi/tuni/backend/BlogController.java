@@ -94,6 +94,25 @@ public class BlogController {
         return blogRepository.findArticlesByTitleContainingIgnoreCaseOrContentContainingIgnoreCaseOrderByDateAsc(value,value);
     }
 
+    @Secured({"ROLE_USER", "ROLE_ADMIN"})
+    @DeleteMapping("/blogs/comments/{commentId:\\d+}")
+    public ResponseEntity<Void> deleteComment(@PathVariable int commentId, Authentication auth) {
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new CannotFindTargetException(commentId, "Cannot find comment with id: " + commentId));
+
+        User user = userRepository.findUserByUsername(auth.getName())
+                .orElseThrow(() -> new CannotFindTargetException(0, "Cannot find user with username: " + auth.getName()));
+
+        if (user.isAdmin() || user.equals(comment.getAuthor())) {
+            commentRepository.delete(comment);
+
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
+        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+    }
+
+    @Secured({"ROLE_USER", "ROLE_ADMIN"})
     @PostMapping("/blogs/comments")
     public ResponseEntity<Void> addComment(@RequestParam String comment, @RequestParam int articleId, Authentication auth) {
         User author = userRepository.findUserByUsername(auth.getName())
