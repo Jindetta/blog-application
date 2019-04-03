@@ -3,7 +3,6 @@ package fi.tuni.backend;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -19,6 +18,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ *
+ */
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true)
@@ -28,7 +30,6 @@ public class LoginConfigurer extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private UserRepository repository;
-
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) {
@@ -42,12 +43,9 @@ public class LoginConfigurer extends WebSecurityConfigurerAdapter {
 
         users.forEach(user -> {
             try {
-                String role = user.getUsername().equalsIgnoreCase("tuksu") || user.getUsername().equalsIgnoreCase("jindetta")
-                        ? "ROLE_ADMIN":"ROLE_USER";
-
                 auth.inMemoryAuthentication()
                         .withUser(user.getUsername()).password(user.getPassword())
-                        .authorities(role);
+                        .authorities(user.isAdmin() ? "ROLE_ADMIN" : "ROLE_USER");
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -57,7 +55,6 @@ public class LoginConfigurer extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/securityNone").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .httpBasic()
@@ -74,6 +71,11 @@ public class LoginConfigurer extends WebSecurityConfigurerAdapter {
                     System.out.println("LOGGED OUT");
                 }),
                 BasicAuthenticationFilter.class);
+    }
+
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring().antMatchers("/*.*", "/static/**");
     }
 
     @Bean
