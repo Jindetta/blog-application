@@ -1,5 +1,6 @@
 package fi.tuni.backend;
 
+import com.sun.deploy.ui.CacheUpdateProgressDialog;
 import org.springframework.context.annotation.Scope;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -7,6 +8,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -125,8 +127,14 @@ public class BlogController {
     }
 
     @PostMapping("/blogs/comments")
-    public ResponseEntity<Void> addComment(@RequestParam Comment comment) {
-        commentRepository.save(comment);
+    public ResponseEntity<Void> addComment(@RequestParam String comment, @RequestParam int articleId, Authentication auth) {
+        User author = userRepository.findUserByUsername(auth.getName())
+                .orElseThrow(() -> new CannotFindTargetException(0, "Cannot find user with username: " + auth.getName()));
+
+        Article article = blogRepository.findById(articleId)
+                .orElseThrow(() -> new CannotFindTargetException(articleId, "Cannot find article with id: " + articleId));
+
+        commentRepository.save(new Comment(author,article,comment));
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
