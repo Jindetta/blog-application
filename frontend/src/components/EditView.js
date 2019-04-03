@@ -39,7 +39,6 @@ class EditView extends Component {
     fetch(`${this.fetchUrl}/blogs/${this.props.match.params.id}`)
       .then(response => response.json())
       .then(data => {
-        console.log(data)
         this.setState({title: data.title, content: data.content, id: data.id, authorId: data.author_id})
       })
       .then(() => this.fetchUserData());
