@@ -20,10 +20,17 @@ class Ribbon extends Component {
   }
 
   ribbonItems() {
+    if(this.props.permits === "ADMIN") {
+      return [
+        {index: 0, label: 'Articles', icon: 'pi pi-fw pi-home'},
+        {index: 1, label: 'Write', icon: 'pi pi-fw pi-pencil'},
+        {index: 2, label: 'Search', icon: 'pi pi-fw pi-search'},
+      ];
+    }
+
     return [
       {index: 0, label: 'Articles', icon: 'pi pi-fw pi-home'},
-      {index: 1, label: 'Write', icon: 'pi pi-fw pi-pencil'},
-      {index: 2, label: 'Search', icon: 'pi pi-fw pi-search'},
+      {index: 2, label: 'Search', icon: 'pi pi-fw pi-search'}
     ];
   }
 
