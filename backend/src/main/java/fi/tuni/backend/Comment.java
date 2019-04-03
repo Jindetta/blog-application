@@ -6,6 +6,14 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 
+/**
+ * POJO for storing comment information.
+ *
+ * @author Joonas Lauhala {@literal <joonas.lauhala@tuni.fi>}
+ *         Tuukka Juusela {@literal <tuukka.juusela@tuni.fi}
+ * @version 20192802
+ * @since   1.8
+ */
 @Entity
 public class Comment implements HateoasInterface {
     @Id

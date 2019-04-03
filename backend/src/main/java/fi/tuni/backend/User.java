@@ -4,6 +4,14 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 
+/**
+ * POJO for storing user information.
+ *
+ * @author Joonas Lauhala {@literal <joonas.lauhala@tuni.fi>}
+ *         Tuukka Juusela {@literal <tuukka.juusela@tuni.fi}
+ * @version 20192802
+ * @since   1.8
+ */
 @Entity
 public class User implements HateoasInterface {
     @Id

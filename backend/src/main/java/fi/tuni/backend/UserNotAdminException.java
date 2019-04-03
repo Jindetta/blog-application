@@ -1,5 +1,8 @@
 package fi.tuni.backend;
 
+/**
+ *
+ */
 public class UserNotAdminException extends IllegalArgumentException {
     private String message;
 

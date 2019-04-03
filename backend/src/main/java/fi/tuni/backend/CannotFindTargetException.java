@@ -1,5 +1,8 @@
 package fi.tuni.backend;
 
+/**
+ *
+ */
 public class CannotFindTargetException extends IllegalArgumentException {
     private int targetID;
     private String message;

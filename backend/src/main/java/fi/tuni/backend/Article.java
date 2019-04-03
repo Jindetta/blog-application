@@ -7,6 +7,14 @@ import org.hibernate.annotations.OnDeleteAction;
 import javax.persistence.*;
 import java.time.LocalDate;
 
+/**
+ * POJO for storing article information.
+ *
+ * @author Joonas Lauhala {@literal <joonas.lauhala@tuni.fi>}
+ *         Tuukka Juusela {@literal <tuukka.juusela@tuni.fi}
+ * @version 20192802
+ * @since   1.8
+ */
 @Entity
 public class Article implements HateoasInterface {
     @Id
