@@ -16,16 +16,6 @@ class WriteView extends Component {
     this.postData = this.postData.bind(this);
   }
 
-  renderHeader() {
-    return (
-      <span className="ql-formats">
-          <button className="ql-bold" aria-label="Bold"></button>
-          <button className="ql-italic" aria-label="Italic"></button>
-          <button className="ql-underline" aria-label="Underline"></button>
-      </span>
-    );
-  }
-
   postData(url = '') {
     let data = new FormData();
     data.append("title", this.state.title);
@@ -55,7 +45,7 @@ class WriteView extends Component {
             <h3>Content</h3>
           </div>
           <div className="p-col-12 p-md-12">
-            <Editor headerTemplate={this.renderHeader()} style={{height:'250pt'}} value={this.state.content} onTextChange={(e)=>this.setState({content:e.textValue})}/>
+            <Editor headerTemplate={} style={{height:'250pt'}} value={this.state.content} onTextChange={(e)=>this.setState({content:e.textValue})}/>
           </div>
           <div className="p-col-12 p-md-12">
             <Button label="Clear" icon="pi pi-times" onClick={() => this.setState({content:''})}/>
