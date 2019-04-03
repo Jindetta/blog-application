@@ -1,5 +1,7 @@
 package fi.tuni.backend;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
@@ -12,6 +14,7 @@ public class User implements HateoasInterface {
     private String username;
 
     @Column(length = 60)
+    @JsonIgnore
     private String password;
 
     @Column
