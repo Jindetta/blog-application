@@ -105,4 +105,20 @@ public class Article implements HateoasInterface {
     public String toString() {
         return String.format("{Id: %d, AuthorId: %d, Title: \"%s\", Content: \"%s\"}", id, author.getId(), title, content);
     }
+
+    @Override
+    public boolean equals(Object object) {
+        if (object instanceof Article) {
+            Article articleData = (Article) object;
+
+            return this == object ||
+                   title.equals(articleData.getTitle()) &&
+                   content.equals(articleData.getContent()) &&
+                   author.equals(articleData.getAuthor()) &&
+                   date.equals(articleData.getDate()) &&
+                   id == articleData.getId();
+        }
+
+        return false;
+    }
 }

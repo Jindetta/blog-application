@@ -78,4 +78,19 @@ public class User implements HateoasInterface {
     public String toString() {
         return String.format("{Id: %d, Admin: %b, username: %s, password: %s}", id, admin, username, password);
     }
+
+    @Override
+    public boolean equals(Object object) {
+        if (object instanceof User) {
+            User userData = (User) object;
+
+            return this == object ||
+                   username.equals(userData.getUsername()) &&
+                   password.equals(userData.getPassword()) &&
+                   admin == userData.isAdmin() &&
+                   id == userData.getId();
+        }
+
+        return false;
+    }
 }

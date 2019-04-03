@@ -93,4 +93,19 @@ public class Comment implements HateoasInterface {
     public String toString() {
         return String.format("{Author: %d, Article: %d, Comment: \"%s\"}", author.getId(), article.getId(), comment);
     }
+
+    @Override
+    public boolean equals(Object object) {
+        if (object instanceof Comment) {
+            Comment commentData = (Comment) object;
+
+            return this == object ||
+                   comment.equals(commentData.getComment()) &&
+                   article.equals(commentData.getArticle()) &&
+                   author.equals(commentData.getAuthor()) &&
+                   id == commentData.getId();
+        }
+
+        return false;
+    }
 }
