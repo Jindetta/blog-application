@@ -17,6 +17,7 @@ class BlogView extends Component {
     this.renderArticle = this.renderArticle.bind(this);
     this.deleteArticle = this.deleteArticle.bind(this);
     this.fetchData = this.fetchData.bind(this);
+    this.renderAdminButtons = this.renderAdminButtons.bind(this);
 
     if (process.env.NODE_ENV === "development") {
       this.fetchUrl = "http://localhost:8080";
@@ -50,13 +51,19 @@ class BlogView extends Component {
           </div>
           <div className="p-col-3">
             <Button icon="pi pi-arrow-right" className="p-button-secondary" onClick={e => window.location = `/#/articles/${data.id}`}/>
-            <Button icon="pi pi-times" className="p-button-danger" onClick={e => this.deleteArticle(data.id)}/>
-            <Button icon="pi pi-pencil" className="p-button" onClick={e => window.location.href = `/#/edit/`+data.id}/>
+            {this.props.permits === "ADMIN"? this.renderAdminButtons(data):""}
           </div>
         </div>
         <p>{data.content}</p>
       </div>
     );
+  }
+
+  renderAdminButtons(data) {
+    return <>
+        <Button icon="pi pi-times" className="p-button-danger" onClick={e => this.deleteArticle(data.id)}/>
+        <Button icon="pi pi-pencil" className="p-button" onClick={e => window.location.href = `/#/edit/`+data.id}/>
+      </>
   }
 
   deleteArticle(articleId) {
