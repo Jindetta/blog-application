@@ -29,14 +29,8 @@ public class BackendApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        List<User> users = Stream.of(
-            new User("Tuukka", "Juusela", true),
-            new User("Taneli", "Taikina"),
-            new User("Maikki", "Manaaja"),
-            new User("Joonas", "Lauhala", true)
-        ).collect(Collectors.toList());
-
-	    userRepository.saveAll(users);
+	    ArrayList<User> users = new ArrayList<>();
+	    userRepository.findAll().forEach(users::add);
 
 	    List<Article> articles = Stream.of(
         new Article(LocalDate.now(), "Rocket League", "Rocket League is a vehicular soccer video game developed and published by Psyonix. The game was first released for Microsoft Windows and PlayStation 4 in July 2015, with ports for Xbox One, macOS, Linux, and Nintendo Switch being released later on. In June 2016, 505 Games began distributing a physical retail version for PlayStation 4 and Xbox One, with Warner Bros. Interactive Entertainment taking over those duties by the end of 2017.", users.get(3)),
