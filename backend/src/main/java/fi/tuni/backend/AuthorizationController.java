@@ -17,11 +17,15 @@ public class AuthorizationController {
 
     @GetMapping("permits")
     public Permits getPermissions (Authentication auth) {
-        Optional<User> result = userRepository.findUserByUsername(auth.getName());
+        if (auth != null) {
+            Optional<User> result = userRepository.findUserByUsername(auth.getName());
 
-        return new Permits(
-            result.map(user -> user.isAdmin() ? Permits.PermitTypes.ADMIN : Permits.PermitTypes.USER)
-                  .orElse(Permits.PermitTypes.ANONYMOUS)
-        );
+            return new Permits(
+                result.map(user -> user.isAdmin() ? Permits.PermitTypes.ADMIN : Permits.PermitTypes.USER)
+                      .orElse(Permits.PermitTypes.ANONYMOUS)
+            );
+        }
+
+        return new Permits(Permits.PermitTypes.ANONYMOUS);
     }
 }
