@@ -8,11 +8,11 @@ public class User implements HateoasInterface {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
-    @Column
-    private String firstName;
+    @Column(unique = true)
+    private String username;
 
-    @Column
-    private String lastName;
+    @Column(length = 60)
+    private String password;
 
     @Column
     private boolean admin;
@@ -21,15 +21,15 @@ public class User implements HateoasInterface {
         return id;
     }
 
-    public User(String firstName, String lastName) {
-        setFirstName(firstName);
-        setLastName(lastName);
+    public User(String username, String password) {
+        setUsername(username);
+        setPassword(password);
     }
 
-    public User(String firstName, String lastName, boolean admin) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.admin = admin;
+    public User(String username, String password, boolean admin) {
+        setUsername(username);
+        setPassword(password);
+        setAdmin(admin);
     }
 
     public boolean isAdmin() {
@@ -42,20 +42,20 @@ public class User implements HateoasInterface {
 
     public User(){}
 
-    public String getFirstName() {
-        return firstName;
+    public String getUsername() {
+        return username;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public String getLastName() {
-        return lastName;
+    public String getPassword() {
+        return password;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     @Override
@@ -65,6 +65,6 @@ public class User implements HateoasInterface {
 
     @Override
     public String toString() {
-        return String.format("{Id: %d, Admin: %b, Firstname: %s, Lastname: %s}", id, admin, firstName, lastName);
+        return String.format("{Id: %d, Admin: %b, username: %s, password: %s}", id, admin, username, password);
     }
 }
