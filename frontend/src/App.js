@@ -19,6 +19,8 @@ import Ribbon from './components/Ribbon';
 import {HashRouter, Route, Switch} from 'react-router-dom';
 import BlogView from "./components/BlogView";
 
+import * as actions from './actions/';
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -48,6 +50,12 @@ class App extends Component {
       </HashRouter>
     );
   }
+
+  componentDidMount() {
+    let url = window.location.origin + "/permits";
+    console.log(url)
+    fetch(url).then(response => response.json()).then(data => this.props.dispatch(actions.setPermits(data.permit)))
+  }
 }
 
-export default connect(data => data.ribbon)(App);
+export default connect(data => data.global)(App);
