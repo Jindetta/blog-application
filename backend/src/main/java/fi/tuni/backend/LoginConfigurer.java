@@ -13,6 +13,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true)
@@ -21,19 +25,19 @@ public class LoginConfigurer extends WebSecurityConfigurerAdapter {
     private LoginEntryPoint authenticationEntryPoint;
 
     @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication()
-                .withUser("tuksu").password(passwordEncoder().encode("juksu"))
-                .authorities("ROLE_ADMIN");
-        auth.inMemoryAuthentication()
-                .withUser("jintsu").password(passwordEncoder().encode("dintsu"))
-                .authorities("ROLE_ADMIN");
-        auth.inMemoryAuthentication()
-                .withUser("taneli").password(passwordEncoder().encode("taikina"))
-                .authorities("ROLE_USER");
-        auth.inMemoryAuthentication()
-                .withUser("maikki").password(passwordEncoder().encode("manaaja"))
-                .authorities("ROLE_USER");
+    private UserRepository repository;
+
+
+    @Autowired
+    public void configureGlobal(AuthenticationManagerBuilder auth) {
+        List<User> users = Stream.of(
+                new User("tuksu",  passwordEncoder().encode("juksu"), true),
+                new User("taneli",  passwordEncoder().encode("taukki")),
+                new User("maikki", passwordEncoder().encode("manaaja")),
+                new User("jindetta",  passwordEncoder().encode("123"), true)
+        ).collect(Collectors.toList());
+        repository.saveAll(users);
+
     }
 
     @Override
