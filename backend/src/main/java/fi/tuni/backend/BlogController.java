@@ -1,19 +1,18 @@
 package fi.tuni.backend;
 
-import org.springframework.context.annotation.Scope;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
+/**
+ *
+ */
 @RestController
-@Scope("session")
 public class BlogController {
 
     @Autowired
@@ -57,26 +56,18 @@ public class BlogController {
 
     @Secured("ROLE_ADMIN")
     @PostMapping("blogs")
-    public ResponseEntity<Void> addArticle(String title, String content, Authentication auth, UriComponentsBuilder builder) {
+    public ResponseEntity<Void> addArticle(String title, String content, Authentication auth) {
         User author = userRepository.findUserByUsername(auth.getName())
                 .orElseThrow(() -> new CannotFindTargetException(0, "Cannot find user with username: " + auth.getName()));
 
         if(author.isAdmin()) {
             Article article = new Article(title, content, author);
             blogRepository.save(article);
-            return getVoidResponseEntity(builder, article, HttpStatus.CREATED);
+
+            return new ResponseEntity<>(HttpStatus.CREATED);
         }
 
         throw new UserNotAdminException("Forbidden action, user with id " + auth.getName() + " is not a admin");
-    }
-
-    private ResponseEntity<Void> getVoidResponseEntity(UriComponentsBuilder builder, Article article, HttpStatus status) {
-
-        UriComponents uriComponents = builder.path("blogs/{id}").buildAndExpand(article.getId());
-        HttpHeaders header = new HttpHeaders();
-        header.setLocation(uriComponents.toUri());
-
-        return new ResponseEntity<Void>(header, status);
     }
 
     @Secured("ROLE_ADMIN")
@@ -85,14 +76,14 @@ public class BlogController {
         Article article = blogRepository.findById(id).orElseThrow(
                 () -> new CannotFindTargetException(id, "Couldn't modify id " + id + " because it doesn't exist"));
         User user = userRepository.findUserByUsername(authentication.getName()).orElseThrow(
-                () -> new CannotFindTargetException(0, "Couldn't find user " +authentication.getName()));
+                () -> new CannotFindTargetException(0, "Couldn't find user " + authentication.getName()));
 
         if (user.isAdmin()) {
             article.setTitle(newTitle);
             article.setContent(newContent);
             blogRepository.save(article);
 
-            return getVoidResponseEntity(builder, article, HttpStatus.CREATED);
+            return new ResponseEntity<>(HttpStatus.CREATED);
         }
 
         throw new UserNotAdminException("Forbidden action, user " + authentication.getName() + " is not a admin");
@@ -100,7 +91,7 @@ public class BlogController {
 
     @GetMapping("blogs/search/{value}")
     public Iterable<Article> searchPost(@PathVariable String value) {
-        return blogRepository.findArticlesByTitleContainingIgnoreCaseOrContentContainingIgnoreCase(value,value);
+        return blogRepository.findArticlesByTitleContainingIgnoreCaseOrContentContainingIgnoreCaseOrderByDateAsc(value,value);
     }
 
     @PostMapping("/blogs/comments")
