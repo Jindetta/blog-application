@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
+/**
+ *
+ */
 @RestController
-@Scope("session")
 public class UserController {
 
     @Autowired
@@ -29,7 +31,7 @@ public class UserController {
 
         HttpHeaders header = new HttpHeaders();
         header.setLocation(uriComponents.toUri());
-        return new ResponseEntity<Void>(header, HttpStatus.CREATED);
+        return new ResponseEntity<>(header, HttpStatus.CREATED);
     }
 
     @Secured("ROLE_ADMIN")
@@ -37,7 +39,7 @@ public class UserController {
     public ResponseEntity<Void> removeUser(@PathVariable int id, UriComponentsBuilder builder) {
         try {
             userRepository.deleteById(id);
-            return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (EmptyResultDataAccessException e) {
             throw new CannotFindTargetException(id,"Cannot find user with id  " +  id);
         }
@@ -45,8 +47,7 @@ public class UserController {
 
     @GetMapping("users/{id:\\d+}")
     public User getUser(@PathVariable int id) {
-        User user = userRepository.findById(id).orElseThrow(() -> new CannotFindTargetException(id, "Cannot find user with id  " +  id));
-        return user;
+        return userRepository.findById(id).orElseThrow(() -> new CannotFindTargetException(id, "Cannot find user with id  " +  id));
     }
 
     @GetMapping("/users/{authorId:\\d+}/comments")
@@ -56,7 +57,6 @@ public class UserController {
 
     @GetMapping("users")
     public Iterable<User> getUsers() {
-        Iterable<User> users = userRepository.findAll();
-        return users;
+        return userRepository.findAll();
     }
 }
