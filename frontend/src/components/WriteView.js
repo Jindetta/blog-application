@@ -12,7 +12,6 @@ class WriteView extends Component {
 
     this.state = {title: "", content: ""};
 
-    this.renderHeader = this.renderHeader.bind(this);
     this.postData = this.postData.bind(this);
   }
 
@@ -45,7 +44,7 @@ class WriteView extends Component {
             <h3>Content</h3>
           </div>
           <div className="p-col-12 p-md-12">
-            <Editor headerTemplate={} style={{height:'250pt'}} value={this.state.content} onTextChange={(e)=>this.setState({content:e.textValue})}/>
+            <Editor headerTemplate={<p></p>} style={{height:'250pt'}} value={this.state.content} onTextChange={(e)=>this.setState({content:e.textValue})}/>
           </div>
           <div className="p-col-12 p-md-12">
             <Button label="Clear" icon="pi pi-times" onClick={() => this.setState({content:''})}/>
