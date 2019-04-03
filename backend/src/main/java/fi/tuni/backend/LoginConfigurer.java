@@ -12,7 +12,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -33,11 +32,13 @@ public class LoginConfigurer extends WebSecurityConfigurerAdapter {
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) {
+        PasswordEncoder encoder = passwordEncoder();
+
         List<User> users = Stream.of(
-                new User("tuksu",  passwordEncoder().encode("juksu"), true),
-                new User("taneli",  passwordEncoder().encode("taukki")),
-                new User("maikki", passwordEncoder().encode("manaaja")),
-                new User("jindetta",  passwordEncoder().encode("123"), true)
+                new User("tuksu",  encoder.encode("juksu"), true),
+                new User("taneli",  encoder.encode("taukki")),
+                new User("maikki", encoder.encode("manaaja")),
+                new User("jindetta",  encoder.encode("123"), true)
         ).collect(Collectors.toList());
         repository.saveAll(users);
 
@@ -54,23 +55,20 @@ public class LoginConfigurer extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-                .anyRequest().authenticated()
+        http    .sessionManagement()
+                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .httpBasic()
-                .authenticationEntryPoint(authenticationEntryPoint);
-
-        http.csrf().disable();
-
-        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.ALWAYS);
-
-        http.addFilterAfter(new LogoutFilter("https://yle.fi", (request, response, authentication) -> {
-                    System.out.println(request);
-                    System.out.println(response);
-                    System.out.println(authentication);
-                    System.out.println("LOGGED OUT");
-                }),
-                BasicAuthenticationFilter.class);
+                    .authenticationEntryPoint(authenticationEntryPoint)
+                .and()
+                .authorizeRequests()
+                    .antMatchers("/**")
+                    //.permitAll()
+                    //.antMatchers("/loginPrompt")
+                    .authenticated()
+                .and()
+                .csrf()
+                    .disable();
     }
 
     @Override
