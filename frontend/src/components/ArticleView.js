@@ -20,6 +20,7 @@ class ArticleView extends Component {
     this.fetchAllData = this.fetchAllData.bind(this);
     this.fetchUserData = this.fetchUserData.bind(this);
     this.postComment = this.postComment.bind(this);
+    this.renderCommenting = this.renderCommenting.bind(this);
 
     this.state = {comment: ""}
     if (process.env.NODE_ENV === "development") {
@@ -106,19 +107,23 @@ class ArticleView extends Component {
     }
   }
 
+  renderCommenting() {
+    return <div id="comment-section">
+      <div>
+        <Editor headerTemplate={<b>Comment</b>} style={{height:'80pt'}} value={this.state.comment} onTextChange={(e)=>this.setState({comment:e.textValue})}/>
+      </div>
+      <div>
+        <Button label="Comment" id="comment-button" onClick={() => this.postComment()}></Button>
+      </div>
+    </div>
+  }
+
   render() {
     return <div id="page">
       <div>
         {this.getContent()}
       </div>
-      <div id="comment-section">
-        </div>
-      <Editor headerTemplate={<b>Comment</b>} style={{height:'80pt'}} value={this.state.comment} onTextChange={(e)=>this.setState({comment:e.textValue})}/>
-        <div>
-        <div>
-          <Button label="Comment" id="comment-button" onClick={() => this.postComment()}></Button>
-        </div>
-      </div>
+      {this.props.permits === "ADMIN" || this.props.permits === "USER"?this.renderCommenting():""}
     </div>;
   }
 
