@@ -1,20 +1,24 @@
 package fi.tuni.backend;
 
+/**
+ *
+ */
 public class Permits {
-    public final static String ADMIN = "ADMIN";
-    public final static String USER = "USER";
-    public final static String ANONYMOUS= "ANONYMOUS";
-    private String permit;
+    private PermitTypes permit;
 
-    public Permits(String permit) {
+    public Permits(PermitTypes permit) {
         setPermit(permit);
     }
 
     public String getPermit() {
-        return permit;
+        return permit.toString();
     }
 
-    public void setPermit(String permit) {
+    public void setPermit(PermitTypes permit) {
         this.permit = permit;
+    }
+
+    public enum PermitTypes {
+        ADMIN, USER, ANONYMOUS
     }
 }
