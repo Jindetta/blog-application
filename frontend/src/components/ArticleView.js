@@ -61,7 +61,7 @@ class ArticleView extends Component {
     return (
       <div key={data.id} className="article">
         <h1>{data.title}</h1>
-        <p>{this.props.AUTHOR_DATA?this.props.AUTHOR_DATA.firstName + " " + this.props.AUTHOR_DATA.lastName:"author"}</p>
+        <p>{this.props.AUTHOR_DATA?this.props.AUTHOR_DATA.username:"author"}</p>
         <p>{data.content}</p>
         <div>
           {this.props.COMMENT_DATA?this.props.COMMENT_DATA.map(comment => <p className="comment">{comment.comment}</p>): "No comments"}
