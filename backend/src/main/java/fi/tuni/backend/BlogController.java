@@ -1,6 +1,5 @@
 package fi.tuni.backend;
 
-import com.sun.deploy.ui.CacheUpdateProgressDialog;
 import org.springframework.context.annotation.Scope;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -12,8 +11,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
-
-import java.util.Optional;
 
 @RestController
 @Scope("session")
@@ -40,20 +37,18 @@ public class BlogController {
 
     @Secured("ROLE_ADMIN")
     @DeleteMapping("blogs/{id:\\d+}")
-    public ResponseEntity<Void> removeArticle(@PathVariable int id, @RequestParam int userId) {
+    public ResponseEntity<Void> removeArticle(@PathVariable int id, Authentication auth) {
         try {
-            Optional<User> user = userRepository.findById(userId);
+            User author = userRepository.findUserByUsername(auth.getName())
+                    .orElseThrow(() -> new CannotFindTargetException(0, "Cannot find user with username: " + auth.getName()));
 
-            if(user.isPresent()) {
-                if(user.get().isAdmin()) {
-                    blogRepository.deleteById(id);
-                    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-                }
-
-                throw new UserNotAdminException("Forbidden action, user with id " + userId + " is not admin");
-            } else {
-                throw new CannotFindTargetException(userId, "Cannot find user with id " + userId);
+            if(author.isAdmin()) {
+                blogRepository.deleteById(id);
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
+
+            throw new UserNotAdminException("Forbidden action, user with username " +  auth.getName() + " is not admin");
+
 
         } catch (EmptyResultDataAccessException e) {
             throw new CannotFindTargetException(id, "Cannot find article with id:" + id);
@@ -62,18 +57,17 @@ public class BlogController {
 
     @Secured("ROLE_ADMIN")
     @PostMapping("blogs")
-    public ResponseEntity<Void> addArticle(Article article, UriComponentsBuilder builder) {
-        Optional<User> user = userRepository.findById(article.getAuthor().getId());
+    public ResponseEntity<Void> addArticle(String title, String content, Authentication auth, UriComponentsBuilder builder) {
+        User author = userRepository.findUserByUsername(auth.getName())
+                .orElseThrow(() -> new CannotFindTargetException(0, "Cannot find user with username: " + auth.getName()));
 
-        if(user.isPresent()) {
-            if(user.get().isAdmin()) {
-                blogRepository.save(article);
-                return getVoidResponseEntity(builder, article, HttpStatus.CREATED);
-            }
-
-            throw new UserNotAdminException("Forbidden action, user with id " + article.getAuthor() + " is not a admin");
+        if(author.isAdmin()) {
+            Article article = new Article(title, content, author);
+            blogRepository.save(article);
+            return getVoidResponseEntity(builder, article, HttpStatus.CREATED);
         }
-        throw new CannotFindTargetException(article.getAuthor().getId(), "Cannot find user with id:" + article.getAuthor().getId());
+
+        throw new UserNotAdminException("Forbidden action, user with id " + auth.getName() + " is not a admin");
     }
 
     private ResponseEntity<Void> getVoidResponseEntity(UriComponentsBuilder builder, Article article, HttpStatus status) {
@@ -87,38 +81,21 @@ public class BlogController {
 
     @Secured("ROLE_ADMIN")
     @PostMapping("blogs/edit/{id:\\d+}")
-    public ResponseEntity<Void> editBlog(@PathVariable int id, Article newArticle, @RequestParam int editorId, UriComponentsBuilder builder) {
+    public ResponseEntity<Void> editBlog(@PathVariable int id, String newTitle, String newContent, Authentication authentication, UriComponentsBuilder builder) {
+        Article article = blogRepository.findById(id).orElseThrow(
+                () -> new CannotFindTargetException(id, "Couldn't modify id " + id + " because it doesn't exist"));
+        User user = userRepository.findUserByUsername(authentication.getName()).orElseThrow(
+                () -> new CannotFindTargetException(0, "Couldn't find user " +authentication.getName()));
 
-        Optional<Article> optionalArticle = blogRepository.findById(id);
-        Optional<User> optionalUser = userRepository.findById(newArticle.getAuthor().getId());
-        Optional<User> optionalEditor = userRepository.findById(editorId);
+        if (user.isAdmin()) {
+            article.setTitle(newTitle);
+            article.setContent(newContent);
+            blogRepository.save(article);
 
-        if(optionalUser.isPresent()) {
-            if(optionalEditor.isPresent()) {
-                if (optionalEditor.get().isAdmin()) {
-                    if (optionalArticle.isPresent()) {
-
-                        Article article = optionalArticle.get();
-
-                        article.setTitle(newArticle.getTitle());
-                        article.setAuthor(newArticle.getAuthor());
-                        article.setContent(newArticle.getContent());
-
-                        blogRepository.save(article);
-
-                        return getVoidResponseEntity(builder, article, HttpStatus.CREATED);
-                    }
-
-                    throw new CannotFindTargetException(id, "Couldn't modify id " + id + " because it doesn't exist");
-                }
-
-                throw new UserNotAdminException("Forbidden action, user with id " + editorId + " is not a admin");
-            }
-
-            throw new CannotFindTargetException(editorId, "Cannot find user with id " + editorId);
+            return getVoidResponseEntity(builder, article, HttpStatus.CREATED);
         }
 
-        throw new CannotFindTargetException(newArticle.getAuthor().getId(), "Cannot find user with id" + newArticle.getAuthor().getId());
+        throw new UserNotAdminException("Forbidden action, user " + authentication.getName() + " is not a admin");
     }
 
     @GetMapping("blogs/search/{value}")
