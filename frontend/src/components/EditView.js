@@ -5,6 +5,7 @@ import {Editor} from "primereact/editor";
 import {Button} from "primereact/button";
 
 import './EditView.css';
+import {connect} from "react-redux";
 
 class EditView extends Component {
   constructor(props) {
@@ -67,34 +68,46 @@ class EditView extends Component {
   }
 
   render() {
-    return (
-      <div id="page">
-        <div className="p-grid p-justify-center">
-          <div className="p-col-12 p-md-12">
-            <h3>Title</h3>
-          </div>
-          <div className="p-col-12 p-md-12">
-            <div className="p-inputgroup">
-              <InputText placeholder="Title" value={this.state.title} onChange={e => this.setState({title: e.target.value})}/>
+    if(this.props.permits === "ADMIN") {
+      return (
+        <div id="page">
+          <div className="p-grid p-justify-center">
+            <div className="p-col-12 p-md-12">
+              <h3>Title</h3>
+            </div>
+            <div className="p-col-12 p-md-12">
+              <div className="p-inputgroup">
+                <InputText placeholder="Title" value={this.state.title}
+                           onChange={e => this.setState({title: e.target.value})}/>
+              </div>
+            </div>
+            <div className="p-col-12 p-md-12">
+              <h3>Author</h3>
+              <p>{this.state.author}</p>
+            </div>
+            <div className="p-col-12 p-md-12">
+              <h3>Content</h3>
+            </div>
+            <div className="p-col-12 p-md-12">
+              <Editor headerTemplate={this.renderHeader()} style={{height: '250pt'}} value={this.state.content}
+                      onTextChange={(e) => this.setState({content: e.textValue})}/>
+            </div>
+            <div className="p-col-12 p-md-12">
+              <Button label="Edit" icon="pi pi-pencil" onClick={() => this.editData()}/>
             </div>
           </div>
-          <div className="p-col-12 p-md-12">
-            <h3>Author</h3>
-            <p>{this.state.author}</p>
-          </div>
-          <div className="p-col-12 p-md-12">
-            <h3>Content</h3>
-          </div>
-          <div className="p-col-12 p-md-12">
-            <Editor headerTemplate={this.renderHeader()} style={{height:'250pt'}} value={this.state.content} onTextChange={(e)=>this.setState({content:e.textValue})}/>
-          </div>
-          <div className="p-col-12 p-md-12">
-            <Button label="Edit" icon="pi pi-pencil" onClick={() => this.editData()}/>
+        </div>
+      );
+    } else {
+      return (
+        <div id="page">
+          <div className="p-grid p-justify-center">
+            <h3>You don't have required permissions</h3>
           </div>
         </div>
-      </div>
-    );
+      );
+    }
   }
 }
 
-export default EditView;
+export default connect(data => data.global)(EditView);
