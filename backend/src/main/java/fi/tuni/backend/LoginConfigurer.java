@@ -38,6 +38,18 @@ public class LoginConfigurer extends WebSecurityConfigurerAdapter {
         ).collect(Collectors.toList());
         repository.saveAll(users);
 
+        users.forEach(user -> {
+            try {
+                String role = user.getUsername().equalsIgnoreCase("tuksu") || user.getUsername().equalsIgnoreCase("jindetta")
+                        ? "ROLE_ADMIN":"ROLE_USER";
+
+                auth.inMemoryAuthentication()
+                        .withUser(user.getUsername()).password(user.getPassword())
+                        .authorities(role);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     @Override
