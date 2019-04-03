@@ -19,6 +19,7 @@ class ArticleView extends Component {
     this.renderArticle = this.renderArticle.bind(this);
     this.fetchAllData = this.fetchAllData.bind(this);
     this.fetchUserData = this.fetchUserData.bind(this);
+    this.postComment = this.postComment.bind(this);
 
     this.state = {comment: ""}
     if (process.env.NODE_ENV === "development") {
@@ -49,9 +50,23 @@ class ArticleView extends Component {
     fetch(`${this.fetchUrl}/users/${this.props.BLOG_DATA.author_id}`)
       .then(response => response.json())
       .then(data => {
-        console.log(data)
         this.props.dispatch(actions.setAuthorData(data))
       });
+  }
+
+  postComment() {
+    if(this.state.comment) {
+      const url = this.fetchUrl + "/blogs/comments";
+      let data = new FormData();
+      data.append("comment", this.state.comment);
+      data.append("articleId",this.props.match.params.id);
+      fetch(url, {
+        method: "POST",
+        credentials: "include",
+        body: data
+      }).then(response => console.log(response))
+        .then(() => window.location.reload())
+    }
   }
 
   renderArticle(data) {
@@ -101,7 +116,7 @@ class ArticleView extends Component {
       <Editor headerTemplate={<b>Comment</b>} style={{height:'80pt'}} value={this.state.comment} onTextChange={(e)=>this.setState({comment:e.textValue})}/>
         <div>
         <div>
-          <Button label="Comment" id="comment-button" onClick={() => console.log("Comment")}></Button>
+          <Button label="Comment" id="comment-button" onClick={() => this.postComment()}></Button>
         </div>
       </div>
     </div>;
