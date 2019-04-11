@@ -5,9 +5,19 @@ package fi.tuni.backend;
  */
 public class Permits {
     private PermitTypes permit;
+    private int userId;
 
-    public Permits(PermitTypes permit) {
+    public Permits(PermitTypes permit, int userId) {
         setPermit(permit);
+        setUserId(userId);
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     public String getPermit() {

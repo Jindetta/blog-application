@@ -23,9 +23,10 @@ public class AuthorizationController {
             return new Permits(
                 result.map(user -> user.isAdmin() ? Permits.PermitTypes.ADMIN : Permits.PermitTypes.USER)
                       .orElse(Permits.PermitTypes.ANONYMOUS)
+                    , result.isPresent()?result.get().getId():-1
             );
         }
 
-        return new Permits(Permits.PermitTypes.ANONYMOUS);
+        return new Permits(Permits.PermitTypes.ANONYMOUS, -1);
     }
 }
