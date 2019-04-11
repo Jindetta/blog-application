@@ -9,6 +9,8 @@ import Loader from './Loader';
 import './ArticleView.css';
 import {Editor} from "primereact/editor";
 import {Button} from "primereact/button";
+import {SplitButton} from "primereact/splitbutton";
+import {Menu} from "primereact/menu";
 
 class ArticleView extends Component {
   constructor(props) {
@@ -23,7 +25,10 @@ class ArticleView extends Component {
     this.renderCommenting = this.renderCommenting.bind(this);
     this.renderComment = this.renderComment.bind(this);
     this.renderCommentAdminButton = this.renderCommentAdminButton.bind(this);
+    this.renderArticleAdminButtons = this.renderArticleAdminButtons.bind(this);
+    this.createAdminButtonItems = this.createAdminButtonItems.bind(this);
     this.deleteComment = this.deleteComment.bind(this);
+    this.deleteArticle = this.deleteArticle.bind(this);
 
     this.state = {comment: ""}
     if (process.env.NODE_ENV === "development") {
@@ -82,14 +87,59 @@ class ArticleView extends Component {
 
     return (
       <div key={data.id} className="article">
-        <h1>{data.title}</h1>
-        <p>{this.props.AUTHOR_DATA?this.props.AUTHOR_DATA.username:"author"}</p>
-        <p>{data.content}</p>
+        <div className="p-grid">
+          <div className="p-col-11">
+            <h1>{data.title}</h1>
+          </div>
+          <div className="p-col-1 p-col-align-center">
+            {this.renderArticleAdminButtons()}
+          </div>
+        </div>
+          <p>{this.props.AUTHOR_DATA?this.props.AUTHOR_DATA.username:"author"}</p>
+          <p>{data.content}</p>
         <div>
           {this.props.COMMENT_DATA?this.props.COMMENT_DATA.map(comment => this.renderComment(comment)): "No comments"}
         </div>
       </div>
     );
+  }
+
+  createAdminButtonItems() {
+    return [
+      {
+        label: 'Options',
+        items: [
+          {
+            label: "Edit", icon: "pi pi-pencil",
+            command: e => window.location.href = `/#/edit/`+this.props.BLOG_DATA.id
+          },
+          {
+            label: "Delete", icon: "pi pi-times",
+            command: (e) => this.deleteArticle()
+          },
+        ]
+      }
+    ]
+  }
+
+  deleteArticle() {
+    const url = window.location.origin + this.props.BLOG_DATA.link;
+    fetch(url,{
+      method:"DELETE",
+      credentials:"include",
+    }).then(res => console.log(res))
+      .then(() => window.location.href = '/#/articles');
+  }
+
+  renderArticleAdminButtons() {
+    if(this.props.permits === "ADMIN") {
+      return <>
+          <Menu model={this.createAdminButtonItems()} popup={true} ref={el => this.menu = el}/>
+          <Button icon="pi pi-bars" className="p-button-secondary" onClick={(event) => this.menu.toggle(event)}/>
+        </>
+    } else {
+      return ""
+    }
   }
 
   renderComment(comment) {
