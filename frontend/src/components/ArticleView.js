@@ -95,7 +95,8 @@ class ArticleView extends Component {
             {this.renderArticleAdminButtons()}
           </div>
         </div>
-          <p>{this.props.AUTHOR_DATA?this.props.AUTHOR_DATA.username:"author"}</p>
+        <p><b>Author: </b>{this.props.AUTHOR_DATA?this.props.AUTHOR_DATA.username:"-"}</p>
+        <p><b>Date: </b>{this.props.BLOG_DATA.date?this.props.BLOG_DATA.date:"-"}</p>
           <p>{data.content}</p>
         <div>
           {this.props.COMMENT_DATA?this.props.COMMENT_DATA.map(comment => this.renderComment(comment)): "No comments"}
