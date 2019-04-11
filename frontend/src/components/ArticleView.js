@@ -99,14 +99,14 @@ class ArticleView extends Component {
             <p>{comment.comment}</p>
           </div>
           <div className="p-col-2" align="center">
-          {this.renderCommentAdminButton(comment.link)}
+          {this.renderCommentAdminButton(comment.link, comment.author_id)}
           </div>
         </div>
       </div>
   }
 
-  renderCommentAdminButton(commentUrl) {
-    if(this.props.permits === "ADMIN") {
+  renderCommentAdminButton(commentUrl, authorId) {
+    if(this.props.permits === "ADMIN" || this.props.userId === authorId) {
       return <Button icon="pi pi-times" className="p-button-danger" onClick={() => this.deleteComment(commentUrl)}/>
     } else {
       return ""

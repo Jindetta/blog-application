@@ -1,5 +1,6 @@
 const DEFAULT_STATE = {
-  permits: "ANONYMOUS"
+  permits: "ANONYMOUS",
+  userId: -1
 }
 
 export default (state = DEFAULT_STATE, action) => {

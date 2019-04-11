@@ -46,7 +46,10 @@ class App extends Component {
 
   componentDidMount() {
     let url = window.location.origin + "/permits";
-    fetch(url).then(response => response.json()).then(data => this.props.dispatch(actions.setPermits(data.permit)))
+    fetch(url).then(response => response.json()).then(data => {
+      this.props.dispatch(actions.setPermits(data.permit))
+      this.props.dispatch(actions.setUserId(data.userId))
+    })
   }
 }
 
