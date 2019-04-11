@@ -21,6 +21,9 @@ class ArticleView extends Component {
     this.fetchUserData = this.fetchUserData.bind(this);
     this.postComment = this.postComment.bind(this);
     this.renderCommenting = this.renderCommenting.bind(this);
+    this.renderComment = this.renderComment.bind(this);
+    this.renderCommentAdminButton = this.renderCommentAdminButton.bind(this);
+    this.deleteComment = this.deleteComment.bind(this);
 
     this.state = {comment: ""}
     if (process.env.NODE_ENV === "development") {
@@ -83,10 +86,40 @@ class ArticleView extends Component {
         <p>{this.props.AUTHOR_DATA?this.props.AUTHOR_DATA.username:"author"}</p>
         <p>{data.content}</p>
         <div>
-          {this.props.COMMENT_DATA?this.props.COMMENT_DATA.map(comment => <p className="comment">{comment.comment}</p>): "No comments"}
+          {this.props.COMMENT_DATA?this.props.COMMENT_DATA.map(comment => this.renderComment(comment)): "No comments"}
         </div>
       </div>
     );
+  }
+
+  renderComment(comment) {
+      return <div className="comment">
+        <div className="p-grid p-align-center">
+          <div className="p-col-10">
+            <p>{comment.comment}</p>
+          </div>
+          <div className="p-col-2" align="center">
+          {this.renderCommentAdminButton(comment.link)}
+          </div>
+        </div>
+      </div>
+  }
+
+  renderCommentAdminButton(commentUrl) {
+    if(this.props.permits === "ADMIN") {
+      return <Button icon="pi pi-times" className="p-button-danger" onClick={() => this.deleteComment(commentUrl)}/>
+    } else {
+      return ""
+    }
+  }
+
+  deleteComment(commentUrl) {
+    const url = this.fetchUrl + commentUrl;
+    fetch(url, {
+      method: "DELETE",
+      credentials: "include",
+    }).then(response => console.log(response))
+      .then(() => window.location.reload())
   }
 
   getContent() {
