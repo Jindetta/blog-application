@@ -88,10 +88,10 @@ class ArticleView extends Component {
     return (
       <div key={data.id} className="article">
         <div className="p-grid">
-          <div className="p-col-11">
+          <div className="p-col-12 p-sm-11">
             <h1>{data.title}</h1>
           </div>
-          <div className="p-col-1 p-col-align-center">
+          <div className="p-col-12 p-sm-1 p-col-align-center ">
             {this.renderArticleAdminButtons()}
           </div>
         </div>
