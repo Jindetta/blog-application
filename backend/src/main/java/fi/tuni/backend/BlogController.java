@@ -9,6 +9,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.util.Optional;
+
 /**
  *
  */
@@ -23,6 +25,9 @@ public class BlogController {
 
     @Autowired
     CommentRepository commentRepository;
+
+    @Autowired
+    LikeRepository likeRepository;
 
     @GetMapping("blogs/{id:\\d+}")
     public Article getArticle(@PathVariable int id) {
@@ -138,5 +143,48 @@ public class BlogController {
     @GetMapping("/blogs/comments")
     public Iterable<Comment> getComments() {
         return commentRepository.findAll();
+    }
+
+
+    @GetMapping("blogs/likes")
+    public Iterable<LikeStatus> getLikes() {
+        System.out.println("All likes");
+        return likeRepository.findAll();
+    }
+
+    @GetMapping("blogs/likes/{id:\\d+}")
+    public boolean hasLiked(@PathVariable int id,  Authentication auth) {
+        User user = userRepository.findUserByUsername(auth.getName())
+                .orElseThrow(() -> new CannotFindTargetException(0, "Cannot find user with username: " + auth.getName()));
+
+        Optional<LikeStatus> status = likeRepository.findByArticleIdAndAndAuthorId(id, user.getId());
+
+        return status.isPresent();
+    }
+
+    @Secured({"ROLE_USER", "ROLE_ADMIN"})
+    @PostMapping("blogs/likes/{id:\\d+}")
+    public ResponseEntity<Void> postLike(@PathVariable int id, Authentication auth) {
+        User user = userRepository.findUserByUsername(auth.getName())
+                .orElseThrow(() -> new CannotFindTargetException(0, "Cannot find user with username: " + auth.getName()));
+
+        blogRepository.findById(id).orElseThrow(() -> new CannotFindTargetException(0, "Cannot find article with id: " + id));
+
+        likeRepository.save(new LikeStatus(id, user.getId()));
+
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @Secured({"ROLE_USER", "ROLE_ADMIN"})
+    @DeleteMapping("blogs/likes/{id:\\d+}")
+    public  ResponseEntity<Void> deleteLike(@PathVariable int id, Authentication auth) {
+        userRepository.findUserByUsername(auth.getName())
+                .orElseThrow(() -> new CannotFindTargetException(0, "Cannot find user with username: " + auth.getName()));
+
+        blogRepository.findById(id).orElseThrow(() -> new CannotFindTargetException(0, "Cannot find article with id: " + id));
+
+        likeRepository.deleteById(id);
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
