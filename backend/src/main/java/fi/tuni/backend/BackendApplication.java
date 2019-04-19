@@ -26,6 +26,9 @@ public class BackendApplication implements CommandLineRunner {
     @Autowired
     CommentRepository commentRepository;
 
+    @Autowired
+    LikeRepository likeRepository;
+
 	public static void main(String[] args) {
 		SpringApplication.run(BackendApplication.class, args);
 	}
@@ -80,5 +83,13 @@ public class BackendApplication implements CommandLineRunner {
         System.out.println("Get all users: curl -d \"firstName=Tuukka&lastName=Juusela\" localhost:8080/users");
         System.out.println("-----------------------------------------------------");
 
+        List<LikeStatus> likeStatuses = Stream.of(
+            new LikeStatus(users.get(0).getId(), articles.get(0).getId()),
+            new LikeStatus(users.get(0).getId(), articles.get(1).getId()),
+            new LikeStatus(users.get(0).getId(), articles.get(2).getId()),
+            new LikeStatus(users.get(0).getId(), articles.get(3).getId())
+        ).collect(Collectors.toList());
+
+        likeRepository.saveAll(likeStatuses);
 	}
 }
