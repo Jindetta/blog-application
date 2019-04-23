@@ -187,4 +187,8 @@ public class BlogController {
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    private int getLikeCount(int commentId) {
+        return likeRepository.findLikeStatusesByCommentId(commentId).size();
+    }
 }
