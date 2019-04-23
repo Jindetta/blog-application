@@ -24,12 +24,23 @@ import java.util.stream.Stream;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true)
 public class LoginConfigurer extends WebSecurityConfigurerAdapter {
+
+    /**
+     *
+     */
     @Autowired
     private LoginEntryPoint authenticationEntryPoint;
 
+    /**
+     *
+     */
     @Autowired
     private UserRepository repository;
 
+    /**
+     *
+     * @param auth
+     */
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) {
         PasswordEncoder encoder = passwordEncoder();
@@ -53,29 +64,43 @@ public class LoginConfigurer extends WebSecurityConfigurerAdapter {
         });
     }
 
+    /**
+     *
+     * @param http
+     * @throws Exception
+     */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http    .sessionManagement()
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
+                    .and()
                 .httpBasic()
                     .authenticationEntryPoint(authenticationEntryPoint)
-                .and()
+                    .and()
                 .authorizeRequests()
-                    .antMatchers("/**")
-                    //.permitAll()
-                    //.antMatchers("/loginPrompt")
+                    .antMatchers("/", "/api/**")
+                    .permitAll()
+                    .antMatchers("/authenticate")
                     .authenticated()
-                .and()
+                    .and()
                 .csrf()
                     .disable();
     }
 
+    /**
+     *
+     * @param web
+     * @throws Exception
+     */
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring().antMatchers("/*.*", "/static/**");
     }
 
+    /**
+     *
+     * @return
+     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
