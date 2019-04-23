@@ -17,6 +17,7 @@ import java.util.Optional;
  *
  */
 @RestController
+@RequestMapping("/api")
 public class BlogController {
 
     @Autowired
@@ -102,7 +103,7 @@ public class BlogController {
     }
 
     @Secured({"ROLE_USER", "ROLE_ADMIN"})
-    @DeleteMapping("/blogs/comments/{commentId:\\d+}")
+    @DeleteMapping("blogs/comments/{commentId:\\d+}")
     public ResponseEntity<Void> deleteComment(@PathVariable int commentId, Authentication auth) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new CannotFindTargetException(commentId, "Cannot find comment with id: " + commentId));
@@ -120,7 +121,7 @@ public class BlogController {
     }
 
     @Secured({"ROLE_USER", "ROLE_ADMIN"})
-    @PostMapping("/blogs/comments")
+    @PostMapping("blogs/comments")
     public ResponseEntity<Void> addComment(@RequestParam String comment, @RequestParam int articleId, Authentication auth) {
         User author = userRepository.findUserByUsername(auth.getName())
                 .orElseThrow(() -> new CannotFindTargetException(0, "Cannot find user with username: " + auth.getName()));
@@ -132,7 +133,7 @@ public class BlogController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @GetMapping("/blogs/{articleId:\\d+}/comments")
+    @GetMapping("blogs/{articleId:\\d+}/comments")
     public Iterable<CommentLikeResponse> getBlogComments(@PathVariable int articleId, Authentication auth) {
         Optional<User> user = userRepository.findUserByUsername(auth.getName());
         Iterable<Comment> comments = commentRepository.findByArticleId(articleId);
@@ -142,7 +143,7 @@ public class BlogController {
         return commentLikeResponses;
     }
 
-    @GetMapping("/blogs/comments/{commentId:\\d+}")
+    @GetMapping("blogs/comments/{commentId:\\d+}")
     public CommentLikeResponse getComment(@PathVariable int commentId, Authentication auth) {
         Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new CannotFindTargetException(0, "Cannot find comment with id: " + commentId));
         Optional<User> user = userRepository.findUserByUsername(auth.getName());
@@ -172,7 +173,7 @@ public class BlogController {
         return response;
     }
 
-    @GetMapping("/blogs/comments")
+    @GetMapping("blogs/comments")
     public Iterable<Comment> getComments() {
         return commentRepository.findAll();
     }
