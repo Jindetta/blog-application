@@ -5,5 +5,5 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.Optional;
 
 public interface LikeRepository extends CrudRepository<LikeStatus, Integer> {
-    Optional<LikeStatus> findByArticleIdAndAndAuthorId(int authorId, int articleId);
+    Optional<LikeStatus> findByLikerIdAndCommentId(int likerId, int CommentId);
 }

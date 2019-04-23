@@ -148,42 +148,42 @@ public class BlogController {
 
     @GetMapping("blogs/likes")
     public Iterable<LikeStatus> getLikes() {
-        System.out.println("All likes");
         return likeRepository.findAll();
     }
 
-    @GetMapping("blogs/likes/{id:\\d+}")
-    public boolean hasLiked(@PathVariable int id,  Authentication auth) {
+    @GetMapping("blogs/likes/{commentId:\\d+}")
+    public boolean hasLiked(@PathVariable int commentId,  Authentication auth) {
         User user = userRepository.findUserByUsername(auth.getName())
                 .orElseThrow(() -> new CannotFindTargetException(0, "Cannot find user with username: " + auth.getName()));
 
-        Optional<LikeStatus> status = likeRepository.findByArticleIdAndAndAuthorId(id, user.getId());
+        Optional<LikeStatus> status = likeRepository.findByLikerIdAndCommentId(commentId, user.getId());
 
         return status.isPresent();
     }
 
     @Secured({"ROLE_USER", "ROLE_ADMIN"})
-    @PostMapping("blogs/likes/{id:\\d+}")
-    public ResponseEntity<Void> postLike(@PathVariable int id, Authentication auth) {
+    @PostMapping("blogs/likes/{commentId:\\d+}")
+    public ResponseEntity<Void> postLike(@PathVariable int commentId, Authentication auth) {
         User user = userRepository.findUserByUsername(auth.getName())
                 .orElseThrow(() -> new CannotFindTargetException(0, "Cannot find user with username: " + auth.getName()));
 
-        blogRepository.findById(id).orElseThrow(() -> new CannotFindTargetException(0, "Cannot find article with id: " + id));
+        commentRepository.findById(commentId).orElseThrow(() -> new CannotFindTargetException(0, "Cannot find comment with id: " + commentId));
 
-        likeRepository.save(new LikeStatus(id, user.getId()));
+        likeRepository.save(new LikeStatus(user.getId(), commentId));
 
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @Secured({"ROLE_USER", "ROLE_ADMIN"})
-    @DeleteMapping("blogs/likes/{id:\\d+}")
-    public  ResponseEntity<Void> deleteLike(@PathVariable int id, Authentication auth) {
-        userRepository.findUserByUsername(auth.getName())
+    @DeleteMapping("blogs/likes/{commentId:\\d+}")
+    public  ResponseEntity<Void> deleteLike(@PathVariable int commentId, Authentication auth) {
+        User liker = userRepository.findUserByUsername(auth.getName())
                 .orElseThrow(() -> new CannotFindTargetException(0, "Cannot find user with username: " + auth.getName()));
 
-        blogRepository.findById(id).orElseThrow(() -> new CannotFindTargetException(0, "Cannot find article with id: " + id));
+        LikeStatus status = likeRepository.findByLikerIdAndCommentId(liker.getId(), commentId)
+                .orElseThrow(() -> new CannotFindTargetException(0, "Cannot find comment with id: " + commentId));
 
-        likeRepository.deleteById(id);
+        likeRepository.delete(status);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

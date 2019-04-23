@@ -6,36 +6,36 @@ import javax.persistence.*;
 @IdClass(LikeStatusInfo.class)
 public class LikeStatus {
     @Id
-    private int authorId;
+    private int likerId;
 
     @Id
-    private int articleId;
+    private int commentId;
 
-    public int getAuthorId() {
-        return authorId;
+    public int getLikerId() {
+        return likerId;
     }
 
-    public void setAuthorId(int authorId) {
-        this.authorId = authorId;
+    public void setLikerId(int likerId) {
+        this.likerId = likerId;
     }
 
-    public int getArticleId() {
-        return articleId;
+    public int getCommentId() {
+        return commentId;
     }
 
-    public void setArticleId(int articleId) {
-        this.articleId = articleId;
+    public void setCommentId(int commentId) {
+        this.commentId = commentId;
     }
 
     public LikeStatus(int authorId, int articleId) {
-        this.authorId = authorId;
-        this.articleId = articleId;
+        this.likerId = authorId;
+        this.commentId = articleId;
     }
 
     public LikeStatus() {}
 
     @Override
     public String toString() {
-        return String.format("{Author: %d, Article: %d}", authorId, articleId);
+        return String.format("{LikerId: %d, CommentId: %d}", likerId, commentId);
     }
 }

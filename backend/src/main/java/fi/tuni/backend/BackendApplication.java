@@ -84,10 +84,10 @@ public class BackendApplication implements CommandLineRunner {
         System.out.println("-----------------------------------------------------");
 
         List<LikeStatus> likeStatuses = Stream.of(
-            new LikeStatus(users.get(0).getId(), articles.get(0).getId()),
-            new LikeStatus(users.get(0).getId(), articles.get(1).getId()),
-            new LikeStatus(users.get(0).getId(), articles.get(2).getId()),
-            new LikeStatus(users.get(0).getId(), articles.get(3).getId())
+            new LikeStatus(users.get(0).getId(), comments.get(1).getId()),
+            new LikeStatus(users.get(0).getId(), comments.get(1).getId()),
+            new LikeStatus(users.get(0).getId(), comments.get(2).getId()),
+            new LikeStatus(users.get(0).getId(), comments.get(3).getId())
         ).collect(Collectors.toList());
 
         likeRepository.saveAll(likeStatuses);
