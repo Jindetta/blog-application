@@ -15,6 +15,7 @@ import org.springframework.web.util.UriComponentsBuilder;
  *
  */
 @RestController
+@RequestMapping("/api")
 public class UserController {
 
     @Autowired
@@ -50,7 +51,7 @@ public class UserController {
         return userRepository.findById(id).orElseThrow(() -> new CannotFindTargetException(id, "Cannot find user with id  " +  id));
     }
 
-    @GetMapping("/users/{authorId:\\d+}/comments")
+    @GetMapping("users/{authorId:\\d+}/comments")
     public Iterable<Comment> getUserComments(@PathVariable int authorId) {
         return commentRepository.findByAuthorId(authorId);
     }
