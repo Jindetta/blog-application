@@ -146,12 +146,12 @@ public class BlogController {
     }
 
 
-    @GetMapping("blogs/likes")
+    @GetMapping("blogs/comments/likes")
     public Iterable<LikeStatus> getLikes() {
         return likeRepository.findAll();
     }
 
-    @GetMapping("blogs/likes/{commentId:\\d+}")
+    @GetMapping("blogs/comments/likes/{commentId:\\d+}")
     public boolean hasLiked(@PathVariable int commentId,  Authentication auth) {
         User user = userRepository.findUserByUsername(auth.getName())
                 .orElseThrow(() -> new CannotFindTargetException(0, "Cannot find user with username: " + auth.getName()));
@@ -162,7 +162,7 @@ public class BlogController {
     }
 
     @Secured({"ROLE_USER", "ROLE_ADMIN"})
-    @PostMapping("blogs/likes/{commentId:\\d+}")
+    @PostMapping("blogs/comments/likes/{commentId:\\d+}")
     public ResponseEntity<Void> postLike(@PathVariable int commentId, Authentication auth) {
         User user = userRepository.findUserByUsername(auth.getName())
                 .orElseThrow(() -> new CannotFindTargetException(0, "Cannot find user with username: " + auth.getName()));
@@ -175,7 +175,7 @@ public class BlogController {
     }
 
     @Secured({"ROLE_USER", "ROLE_ADMIN"})
-    @DeleteMapping("blogs/likes/{commentId:\\d+}")
+    @DeleteMapping("blogs/comments/likes/{commentId:\\d+}")
     public  ResponseEntity<Void> deleteLike(@PathVariable int commentId, Authentication auth) {
         User liker = userRepository.findUserByUsername(auth.getName())
                 .orElseThrow(() -> new CannotFindTargetException(0, "Cannot find user with username: " + auth.getName()));
