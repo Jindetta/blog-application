@@ -15,6 +15,8 @@ class SearchView extends Component{
     this.searchClicked = this.searchClicked.bind(this);
     this.createPostsList = this.createPostsList.bind(this);
     this.createAccordionTab = this.createAccordionTab.bind(this);
+
+    this.fetchUrl = `${window.location.origin}/api`;
   }
 
   textChanged(event) {
@@ -22,8 +24,7 @@ class SearchView extends Component{
   }
 
   searchClicked() {
-    const url = window.location.origin;
-    fetch(`http://localhost:8080/blogs/search/${this.props.SEARCH_VALUE}`).then(response => response.json())
+    fetch(`${this.fetchUrl}/blogs/search/${this.props.SEARCH_VALUE}`).then(response => response.json())
       .then(data => this.props.dispatch(actions.setPosts(data)))
   }
 
