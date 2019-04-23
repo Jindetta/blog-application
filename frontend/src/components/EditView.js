@@ -18,11 +18,7 @@ class EditView extends Component {
     this.renderHeader = this.renderHeader.bind(this);
     this.editData = this.editData.bind(this);
 
-    if (process.env.NODE_ENV === "development") {
-      this.fetchUrl = "http://localhost:8080";
-    } else {
-      this.fetchUrl = window.location.origin;
-    }
+    this.fetchUrl = `${window.location.origin}/api`;
   }
 
   renderHeader() {
