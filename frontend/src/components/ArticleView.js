@@ -31,11 +31,7 @@ class ArticleView extends Component {
     this.deleteArticle = this.deleteArticle.bind(this);
 
     this.state = {comment: ""}
-    if (process.env.NODE_ENV === "development") {
-      this.fetchUrl = "http://localhost:8080";
-    } else {
-      this.fetchUrl = window.location.origin;
-    }
+    this.fetchUrl = `${window.location.origin}/api`;
   }
 
   componentWillMount() {
