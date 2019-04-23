@@ -9,6 +9,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -131,13 +133,43 @@ public class BlogController {
     }
 
     @GetMapping("/blogs/{articleId:\\d+}/comments")
-    public Iterable<Comment> getBlogComments(@PathVariable int articleId) {
-        return commentRepository.findByArticleId(articleId);
+    public Iterable<CommentLikeResponse> getBlogComments(@PathVariable int articleId, Authentication auth) {
+        Optional<User> user = userRepository.findUserByUsername(auth.getName());
+        Iterable<Comment> comments = commentRepository.findByArticleId(articleId);
+        Iterable<CommentLikeResponse> commentLikeResponses = new ArrayList<>();
+
+        comments.forEach(comment ->((ArrayList<CommentLikeResponse>) commentLikeResponses).add(createCommentLikeResponse(comment, user)));
+        return commentLikeResponses;
     }
 
     @GetMapping("/blogs/comments/{commentId:\\d+}")
-    public Comment getComment(@PathVariable int commentId) {
-        return commentRepository.findById(commentId).orElse(null);
+    public CommentLikeResponse getComment(@PathVariable int commentId, Authentication auth) {
+        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new CannotFindTargetException(0, "Cannot find comment with id: " + commentId));
+        Optional<User> user = userRepository.findUserByUsername(auth.getName());
+
+        return createCommentLikeResponse(comment,user);
+    }
+
+    private CommentLikeResponse createCommentLikeResponse(Comment comment, Optional<User> user) {
+        CommentLikeResponse response = new CommentLikeResponse();
+
+        List<LikeStatus> likes = likeRepository.findLikeStatusesByCommentId(comment.getId());
+
+        response.setComment(comment);
+        response.setLikes(likes);
+
+        if(user.isPresent()) {
+            for (LikeStatus like : likes) {
+                if (user.get().getId() == like.getLikerId()) {
+                    response.setHasLiked(true);
+                    break;
+                }
+            }
+        } else {
+            response.setHasLiked(false);
+        }
+
+        return response;
     }
 
     @GetMapping("/blogs/comments")
