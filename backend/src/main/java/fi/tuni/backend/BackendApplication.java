@@ -87,6 +87,9 @@ public class BackendApplication implements CommandLineRunner {
             new LikeStatus(users.get(0).getId(), comments.get(1).getId()),
             new LikeStatus(users.get(0).getId(), comments.get(1).getId()),
             new LikeStatus(users.get(0).getId(), comments.get(2).getId()),
+            new LikeStatus(users.get(1).getId(), comments.get(2).getId()),
+            new LikeStatus(users.get(2).getId(), comments.get(2).getId()),
+            new LikeStatus(users.get(3).getId(), comments.get(2).getId()),
             new LikeStatus(users.get(0).getId(), comments.get(3).getId())
         ).collect(Collectors.toList());
 
