@@ -25,19 +25,19 @@ public class AuthorizationController {
      * @param auth
      * @return
      */
-    @GetMapping("/permits")
-    public Permits getPermissions (Authentication auth) {
+    @GetMapping("/role")
+    public Role getRole(Authentication auth) {
         if (auth != null) {
             Optional<User> result = userRepository.findUserByUsername(auth.getName());
 
-            return new Permits(
-                result.map(user -> user.isAdmin() ? Permits.PermitTypes.ADMIN : Permits.PermitTypes.USER)
-                      .orElse(Permits.PermitTypes.ANONYMOUS),
+            return new Role(
+                result.map(user -> user.isAdmin() ? Role.RoleTypes.ADMIN : Role.RoleTypes.USER)
+                      .orElse(Role.RoleTypes.ANONYMOUS),
                 result.map(User::getId).orElse(-1)
             );
         }
 
-        return new Permits(Permits.PermitTypes.ANONYMOUS, -1);
+        return new Role(Role.RoleTypes.ANONYMOUS, -1);
     }
 
     /**
