@@ -9,21 +9,27 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.Optional;
 
 /**
+ * Controller for authorization
  *
+ * @author Joonas Lauhala {@literal <joonas.lauhala@tuni.fi>}
+ *         Tuukka Juusela {@literal <tuukka.juusela@tuni.fi}
+ * @version 20192802
+ * @since   1.8
  */
 @RestController
 public class AuthorizationController {
 
     /**
-     *
+     * Repository for getting blog applications users.
      */
     @Autowired
     private UserRepository userRepository;
 
     /**
+     * Returns role of the user. Returns ANONYMOUS if user cannot be found from user database.
      *
-     * @param auth
-     * @return
+     * @param auth Used to get users username and return correct level of permission. Provided by Spring.
+     * @return Role of the user. Either ADMIN, USER or ANONYMOUS
      */
     @GetMapping("/role")
     public Role getRole(Authentication auth) {
@@ -41,8 +47,9 @@ public class AuthorizationController {
     }
 
     /**
+     * Prompts authentication.
      *
-     * @return
+     * @return Model for next view.
      */
     @GetMapping("/authenticate")
     public ModelAndView promptAuthentication() {
