@@ -47,7 +47,7 @@ class BlogView extends Component {
           </div>
           <div className="p-col-3">
             <Button icon="pi pi-arrow-right" className="p-button-secondary" onClick={e => window.location = `/#/articles/${data.id}`}/>
-            {this.props.permits === "ADMIN"? this.renderAdminButtons(data):""}
+            {this.props.role === "ADMIN"? this.renderAdminButtons(data):""}
           </div>
         </div>
         <p>{data.content}</p>

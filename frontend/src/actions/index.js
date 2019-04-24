@@ -1,6 +1,6 @@
-export function setPermits(value) {
+export function setRole(value) {
   return {
-   type: 'permits',
+   type: 'role',
    payload: value
   }
 }

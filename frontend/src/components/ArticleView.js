@@ -129,7 +129,7 @@ class ArticleView extends Component {
   }
 
   renderArticleAdminButtons() {
-    if(this.props.permits === "ADMIN") {
+    if(this.props.role === "ADMIN") {
       return <>
           <Menu model={this.createAdminButtonItems()} popup={true} ref={el => this.menu = el}/>
           <Button icon="pi pi-bars" className="p-button-secondary" onClick={(event) => this.menu.toggle(event)}/>
@@ -153,7 +153,7 @@ class ArticleView extends Component {
   }
 
   renderCommentAdminButton(commentUrl, authorId) {
-    if(this.props.permits === "ADMIN" || this.props.userId === authorId) {
+    if(this.props.role === "ADMIN" || this.props.userId === authorId) {
       return <Button icon="pi pi-times" className="p-button-danger" onClick={() => this.deleteComment(commentUrl)}/>
     } else {
       return ""
@@ -203,7 +203,7 @@ class ArticleView extends Component {
       <div>
         {this.getContent()}
       </div>
-      {this.props.permits === "ADMIN" || this.props.permits === "USER"?this.renderCommenting():""}
+      {this.props.role === "ADMIN" || this.props.role === "USER"?this.renderCommenting():""}
     </div>;
   }
 

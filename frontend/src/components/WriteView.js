@@ -30,8 +30,8 @@ class WriteView extends Component {
   }
 
   render() {
-    console.log("WRITE",this.props.permits);
-    if(this.props.permits === "ADMIN")
+    console.log("WRITE",this.props.role);
+    if(this.props.role === "ADMIN")
       return (
         <div id="page">
           <div className="p-grid p-justify-center">

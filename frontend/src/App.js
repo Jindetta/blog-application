@@ -25,7 +25,7 @@ class App extends Component {
         <div>
           <div className="p-grid p-justify-center">
             <div className="p-col-10">
-              <Ribbon permits={this.props.permits}/>
+              <Ribbon role={this.props.role}/>
             </div>
           </div>
           <div className="p-grid p-justify-center">
@@ -45,9 +45,9 @@ class App extends Component {
   }
 
   componentDidMount() {
-    let url = `${window.location.origin}/permits`;
+    let url = `${window.location.origin}/role`;
     fetch(url).then(response => response.json()).then(data => {
-      this.props.dispatch(actions.setPermits(data.permit))
+      this.props.dispatch(actions.setRole(data.role))
       this.props.dispatch(actions.setUserId(data.userId))
     })
   }

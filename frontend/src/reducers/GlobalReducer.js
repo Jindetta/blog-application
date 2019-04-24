@@ -1,5 +1,5 @@
 const DEFAULT_STATE = {
-  permits: "ANONYMOUS",
+  role: "ANONYMOUS",
   userId: -1
 }
 

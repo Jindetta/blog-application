@@ -64,7 +64,7 @@ class EditView extends Component {
   }
 
   render() {
-    if(this.props.permits === "ADMIN") {
+    if(this.props.role === "ADMIN") {
       return (
         <div id="page">
           <div className="p-grid p-justify-center">

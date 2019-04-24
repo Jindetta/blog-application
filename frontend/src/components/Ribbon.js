@@ -1,5 +1,4 @@
 import React,{Component} from "react";
-
 import {connect} from "react-redux";
 
 import {TabMenu} from 'primereact/tabmenu';
@@ -15,10 +14,9 @@ class Ribbon extends Component {
   }
 
   clickMenuTab(event) {
-    if (event.value.index === -1) {
+    if (event.value.label === 'Login') {
       // Login prompt
-      fetch(window.location.href, {credentials: 'include'})
-        .then(response => response.redirect("/loginPrompt"));
+      window.location.pathname = "/authenticate";
     } else {
       window.location = `/#/${event.value.label.toLowerCase()}`
       this.props.dispatch(actions.switchMenu(event.value.index));
@@ -26,7 +24,7 @@ class Ribbon extends Component {
   }
 
   ribbonItems() {
-    switch (this.props.permits) {
+    switch (this.props.role) {
       case 'ADMIN': {
         return [
           {index: 0, label: 'Articles', icon: 'pi pi-fw pi-home'},
@@ -42,8 +40,8 @@ class Ribbon extends Component {
       }
       default: {
         return [
-          {index: -1, label: 'Login', icon: 'pi pi-fw pi-login'},
-          {index: 0, label: 'Articles', icon: 'pi pi-fw pi-home'},
+          {index: 0, label: 'Login', icon: 'pi pi-fw pi-power-on'},
+          {index: 1, label: 'Articles', icon: 'pi pi-fw pi-home'},
           {index: 2, label: 'Search', icon: 'pi pi-fw pi-search'}
         ];
       }
