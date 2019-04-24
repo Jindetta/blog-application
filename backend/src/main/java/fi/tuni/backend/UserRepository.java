@@ -13,5 +13,11 @@ import java.util.Optional;
  * @since   1.8
  */
 public interface UserRepository extends CrudRepository<User, Integer> {
+
+    /**
+     * Finds User with given username.
+     * @param userName Name of user to find.
+     * @return Optional with user.
+     */
     Optional<User> findUserByUsername(String userName);
 }
