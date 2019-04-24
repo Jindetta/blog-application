@@ -1,15 +1,11 @@
 package fi.tuni.backend;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import java.util.List;
-
 public class CommentLikeResponse {
     private Comment comment;
-    private List<LikeStatus> likes;
+    private int likes;
     private boolean hasLiked;
 
-    public CommentLikeResponse(Comment comment, List<LikeStatus> likes, boolean hasLiked) {
+    public CommentLikeResponse(Comment comment, int likes, boolean hasLiked) {
         this.comment = comment;
         this.likes = likes;
         this.hasLiked = hasLiked;
@@ -25,7 +21,7 @@ public class CommentLikeResponse {
         this.comment = comment;
     }
 
-    public void setLikes(List<LikeStatus> likes) {
+    public void setLikes(int likes) {
         this.likes = likes;
     }
 
@@ -37,7 +33,7 @@ public class CommentLikeResponse {
         return comment;
     }
 
-    public List<LikeStatus> getLikes() {
+    public int getLikes() {
         return likes;
     }
 }

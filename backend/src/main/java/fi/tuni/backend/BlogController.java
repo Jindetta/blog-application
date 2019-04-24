@@ -157,7 +157,7 @@ public class BlogController {
         List<LikeStatus> likes = likeRepository.findLikeStatusesByCommentId(comment.getId());
 
         response.setComment(comment);
-        response.setLikes(likes);
+        response.setLikes(likes.size());
 
         if(user.isPresent()) {
             for (LikeStatus like : likes) {
