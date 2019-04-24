@@ -82,7 +82,7 @@ class BlogView extends Component {
 
       return <>
         <Menu popup={true} model={menu} ref={el => temp = el}/>
-        <Button icon="pi pi-bars" className="p-button-danger" onClick={(event) => temp.toggle(event)}/>
+        <Button icon="pi pi-bars" className="p-button-danger admin-button" onClick={(event) => temp.toggle(event)}/>
       </>
     } else {
       return ""
