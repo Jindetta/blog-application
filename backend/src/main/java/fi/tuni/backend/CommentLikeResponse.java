@@ -1,6 +1,6 @@
 package fi.tuni.backend;
 
-public class CommentLikeResponse {
+public class CommentLikeResponse implements HateoasInterface {
     private Comment comment;
     private int likes;
     private boolean hasLiked;
@@ -35,5 +35,10 @@ public class CommentLikeResponse {
 
     public int getLikes() {
         return likes;
+    }
+
+    @Override
+    public String getLink() {
+        return String.format("/blogs/comments/likes/%d", comment.getId());
     }
 }
