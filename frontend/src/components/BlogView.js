@@ -6,8 +6,9 @@ import {Panel} from 'primereact/panel';
 import * as actions from '../actions/ArticleActions';
 import Loader from './Loader';
 
-import './ArticleView.css';
+import './BlogView.css';
 import {Button} from "primereact/button";
+import {Menu} from "primereact/menu";
 
 class BlogView extends Component {
   constructor(props) {
@@ -42,12 +43,13 @@ class BlogView extends Component {
     return (
       <div key={data.id}>
         <div className="p-grid p-align-center ">
-          <div className="p-col-9">
-            <h1>{data.title}</h1>
-          </div>
-          <div className="p-col-3">
-            <Button icon="pi pi-arrow-right" className="p-button-secondary" onClick={e => window.location = `/#/articles/${data.id}`}/>
-            {this.props.role === "ADMIN"? this.renderAdminButtons(data):""}
+          <div className="p-col-10 p-col-align-center">
+            <span>
+              {this.renderAdminButtons(data)}
+            </span>
+            <span>
+              <h1><a href={"/#/articles/" + data.id}>{data.title}</a></h1>
+            </span>
           </div>
         </div>
         <p>{data.content}</p>
@@ -56,14 +58,39 @@ class BlogView extends Component {
   }
 
   renderAdminButtons(data) {
-    return <>
-        <Button icon="pi pi-times" className="p-button-danger" onClick={e => this.deleteArticle(data.id)}/>
-        <Button icon="pi pi-pencil" className="p-button" onClick={e => window.location.href = `/#/edit/`+data.id}/>
+    if(this.props.role === "ADMIN") {
+      const menu =
+        [
+          {
+            label: "Admin options",
+            items: [
+              {
+                label: "Delete",
+                icon: "pi pi-times",
+                command: e => this.deleteArticle(data.id)
+              },
+              {
+                label: "Edit",
+                icon: "pi pi-pencil",
+                command: e => window.location.href = `/#/edit/` + data.id
+              }
+            ]
+          }
+        ]
+
+      let temp = {}
+
+      return <>
+        <Menu className="p-button-primary" popup={true} model={menu} ref={el => temp = el}/>
+        <Button icon="pi pi-bars" className="p-button-primary" onClick={(event) => temp.toggle(event)}/>
       </>
+    } else {
+      return ""
+    }
   }
 
   deleteArticle(articleId) {
-    const url = window.location.origin + "/blogs/" + articleId;
+    const url = this.fetchUrl + "/blogs/" + articleId;
     console.log(url)
     fetch(url,{
       method:"DELETE",
