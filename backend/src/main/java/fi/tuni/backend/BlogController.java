@@ -132,7 +132,7 @@ public class BlogController {
      */
     @Secured("ROLE_ADMIN")
     @PostMapping("blogs/edit/{id:\\d+}")
-    public ResponseEntity<Void> editBlog(@PathVariable int id, String newTitle, String newContent, Authentication authentication, UriComponentsBuilder builder) {
+    public ResponseEntity<Void> editBlog(@PathVariable int id, String newTitle, String newContent, Authentication authentication) {
         Article article = blogRepository.findById(id).orElseThrow(
                 () -> new CannotFindTargetException(id, "Couldn't modify id " + id + " because it doesn't exist"));
         User user = userRepository.findUserByUsername(authentication.getName()).orElseThrow(
@@ -338,9 +338,5 @@ public class BlogController {
         likeRepository.delete(status);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
-
-    private int getLikeCount(int commentId) {
-        return likeRepository.findLikeStatusesByCommentId(commentId).size();
     }
 }
