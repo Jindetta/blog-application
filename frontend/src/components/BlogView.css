@@ -2,3 +2,13 @@ h1 {
     display: inline-block;
     margin-right: 30pt;
 }
+
+#page .p-button {
+    position: relative;
+    bottom: 5pt;
+}
+
+#page .header-icon {
+    position: relative;
+    top: 5pt;
+}

@@ -48,7 +48,7 @@ class BlogView extends Component {
               {this.renderAdminButtons(data)}
             </span>
             <span>
-              <h1><a href={"/#/articles/" + data.id}>{data.title}</a></h1>
+              <h1><a href={"/#/articles/" + data.id}>{data.title} <i className="pi pi-chevron-right header-icon"></i></a></h1>
             </span>
           </div>
         </div>
@@ -81,8 +81,8 @@ class BlogView extends Component {
       let temp = {}
 
       return <>
-        <Menu className="p-button-primary" popup={true} model={menu} ref={el => temp = el}/>
-        <Button icon="pi pi-bars" className="p-button-primary" onClick={(event) => temp.toggle(event)}/>
+        <Menu popup={true} model={menu} ref={el => temp = el}/>
+        <Button icon="pi pi-bars" className="p-button-danger" onClick={(event) => temp.toggle(event)}/>
       </>
     } else {
       return ""
