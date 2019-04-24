@@ -59,8 +59,7 @@ class EditView extends Component {
       method:"POST",
       credentials:"include",
       body: data
-    }).then(response => window.location.href = `/#/articles`)
-      .catch(error => console.log(error));
+    }).then(response => window.location.href = `/#/articles`);
   }
 
   render() {

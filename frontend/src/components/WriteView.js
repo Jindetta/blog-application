@@ -26,12 +26,10 @@ class WriteView extends Component {
       method:"POST",
       credentials:"include",
       body: data
-    }).then(response => response.redirect("/#/articles"))
-      .catch(error => console.log(error));
+    }).then(response => response.redirect("/#/articles"));
   }
 
   render() {
-    console.log("WRITE",this.props.role);
     if(this.props.role === "ADMIN")
       return (
         <div id="page">

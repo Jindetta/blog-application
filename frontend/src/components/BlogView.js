@@ -91,12 +91,10 @@ class BlogView extends Component {
 
   deleteArticle(articleId) {
     const url = this.fetchUrl + "/blogs/" + articleId;
-    console.log(url)
     fetch(url,{
       method:"DELETE",
       credentials:"include",
-    }).then(res => console.log(res))
-      .then(this.fetchData)
+    }).then(this.fetchData)
   }
 
   getContent() {

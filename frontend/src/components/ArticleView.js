@@ -69,8 +69,7 @@ class ArticleView extends Component {
         method: "POST",
         credentials: "include",
         body: data
-      }).then(response => console.log(response))
-        .then(() => window.location.reload())
+      }).then(() => window.location.reload())
     }
   }
 
@@ -124,8 +123,7 @@ class ArticleView extends Component {
     fetch(url,{
       method:"DELETE",
       credentials:"include",
-    }).then(res => console.log(res))
-      .then(() => window.location.href = '/#/articles');
+    }).then(() => window.location.href = '/#/articles');
   }
 
   renderArticleAdminButtons() {
@@ -167,8 +165,7 @@ class ArticleView extends Component {
     fetch(url, {
       method: "DELETE",
       credentials: "include",
-    }).then(response => console.log(response))
-      .then(() => window.location.reload())
+    }).then(() => window.location.reload())
   }
 
   like(likeUrl) {
@@ -176,8 +173,7 @@ class ArticleView extends Component {
     fetch(url, {
       method: "POST",
       credentials: "include",
-    }).then(response => console.log(response))
-      .then(() => window.location.reload())
+    }).then(() => window.location.reload())
   }
 
   renderCommentAdminButton(commentUrl, authorId) {
@@ -204,8 +200,7 @@ class ArticleView extends Component {
     fetch(url, {
       method: "DELETE",
       credentials: "include",
-    }).then(response => console.log(response))
-      .then(() => window.location.reload())
+    }).then(() => window.location.reload())
   }
 
   getContent() {
