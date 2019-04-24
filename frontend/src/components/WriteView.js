@@ -26,7 +26,7 @@ class WriteView extends Component {
       method:"POST",
       credentials:"include",
       body: data
-    }).then(response => response.redirect("/#/articles"));
+    }).then(() => window.location.hash = '/articles');
   }
 
   render() {
@@ -50,7 +50,7 @@ class WriteView extends Component {
             </div>
             <div className="p-col-12 p-md-12">
               <Button label="Clear" icon="pi pi-times" onClick={() => this.setState({content:''})}/>
-              <Button label="Post" icon="pi pi-pencil" onClick={() => this.postData(this.fetchUrl)}/>
+              <Button label="Post" icon="pi pi-pencil" onClick={() => this.postData(this.fetchUrl + '/blogs')}/>
             </div>
           </div>
         </div>
