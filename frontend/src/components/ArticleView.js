@@ -9,7 +9,6 @@ import Loader from './Loader';
 import './ArticleView.css';
 import {Editor} from "primereact/editor";
 import {Button} from "primereact/button";
-import {SplitButton} from "primereact/splitbutton";
 import {Menu} from "primereact/menu";
 
 class ArticleView extends Component {
@@ -26,6 +25,7 @@ class ArticleView extends Component {
     this.renderComment = this.renderComment.bind(this);
     this.renderCommentAdminButton = this.renderCommentAdminButton.bind(this);
     this.renderArticleAdminButtons = this.renderArticleAdminButtons.bind(this);
+    this.renderCommentLike = this.renderCommentLike.bind(this);
     this.createAdminButtonItems = this.createAdminButtonItems.bind(this);
     this.deleteComment = this.deleteComment.bind(this);
     this.deleteArticle = this.deleteArticle.bind(this);
@@ -140,11 +140,22 @@ class ArticleView extends Component {
   }
 
   renderComment(data) {
+    console.log(data)
       return <div className="p-grid">
-          <div className="p-col-1 p-col-align-center">
-            {this.renderCommentAdminButton(data.comment.link, data.comment.author_id)}
+            <div className="p-col-1  p-col-align-center">
+              <div className="p-grid">
+                <div className="p-col p-md-12 p-lg-4">
+                  <b className="like">{data.likes}</b>
+                </div>
+                <div className="p-col p-md-12 p-lg-4">
+                  {this.renderCommentLike(data)}
+                </div>
+                <div className="p-col p-md-12 p-lg-4">
+                  {this.renderCommentAdminButton(data.comment.link, data.comment.author_id)}
+                </div>
+              </div>
           </div>
-          <div className="p-col-11">
+          <div className="p-col-11 p-col-align-center">
             <div className="comment">
             <p>{data.comment.comment}</p>
           </div>
@@ -152,11 +163,38 @@ class ArticleView extends Component {
         </div>
   }
 
+  dislike(likeUrl) {
+    const url = this.fetchUrl + likeUrl;
+    fetch(url, {
+      method: "DELETE",
+      credentials: "include",
+    }).then(response => console.log(response))
+      .then(() => window.location.reload())
+  }
+
+  like(likeUrl) {
+    const url = this.fetchUrl + likeUrl;
+    fetch(url, {
+      method: "POST",
+      credentials: "include",
+    }).then(response => console.log(response))
+      .then(() => window.location.reload())
+  }
+
   renderCommentAdminButton(commentUrl, authorId) {
     if(this.props.role === "ADMIN" || this.props.userId === authorId) {
       return <Button icon="pi pi-times" className="p-button-danger" onClick={() => this.deleteComment(commentUrl)}/>
     } else {
       return ""
+    }
+  }
+
+
+  renderCommentLike(data) {
+    if(data.hasLiked) {
+      return <Button icon="pi pi-chevron-up" className="p-button-success" onClick={() => this.dislike(data.link)}/>
+    } else {
+      return <Button icon="pi pi-chevron-up" className="p-button-secondary" onClick={() => this.like(data.link)}/>
     }
   }
 

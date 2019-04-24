@@ -30,6 +30,10 @@
     padding: 5pt;
 }
 
+#page .like {
+    margin: 10pt;
+}
+
 #page #comment-button {
     margin-top: 5pt;
 }
