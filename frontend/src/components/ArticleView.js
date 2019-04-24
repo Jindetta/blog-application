@@ -132,7 +132,7 @@ class ArticleView extends Component {
     if(this.props.role === "ADMIN") {
       return <>
           <Menu model={this.createAdminButtonItems()} popup={true} ref={el => this.menu = el}/>
-          <Button icon="pi pi-bars" className="p-button-secondary" onClick={(event) => this.menu.toggle(event)}/>
+          <Button icon="pi pi-bars" className="p-button-danger" onClick={(event) => this.menu.toggle(event)}/>
         </>
     } else {
       return ""
