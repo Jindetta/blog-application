@@ -9,5 +9,10 @@ package fi.tuni.backend;
  * @since   1.8
  */
 public interface HateoasInterface {
+
+    /**
+     * Returns link for accessing resource in database.
+     * @return Link for accessing resource in database.
+     */
     String getLink();
 }
