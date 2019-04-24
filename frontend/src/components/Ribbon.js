@@ -35,14 +35,14 @@ class Ribbon extends Component {
       case 'USER': {
         return [
           {index: 0, label: 'Articles', icon: 'pi pi-fw pi-home'},
-          {index: 2, label: 'Search', icon: 'pi pi-fw pi-search'}
+          {index: 1, label: 'Search', icon: 'pi pi-fw pi-search'}
         ];
       }
       default: {
         return [
-          {index: 0, label: 'Login', icon: 'pi pi-fw pi-power-on'},
-          {index: 1, label: 'Articles', icon: 'pi pi-fw pi-home'},
-          {index: 2, label: 'Search', icon: 'pi pi-fw pi-search'}
+          {index: 0, label: 'Articles', icon: 'pi pi-fw pi-home'},
+          {index: 1, label: 'Search', icon: 'pi pi-fw pi-search'},
+          {index: 2, label: 'Login', icon: 'pi pi-fw pi-user'}
         ];
       }
     }
