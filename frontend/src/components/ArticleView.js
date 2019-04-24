@@ -193,7 +193,7 @@ class ArticleView extends Component {
   renderCommentLike(data) {
     if(this.props.role == "ADMIN" || this.props.role == "USER") {
       if (data.hasLiked) {
-        return <Button icon="pi pi-chevron-up" className="p-button-success" onClick={() => this.dislike(data.link)}/>
+        return <Button icon="pi pi-chevron-up" className="p-button-primary" onClick={() => this.dislike(data.link)}/>
       } else {
         return <Button icon="pi pi-chevron-up" className="p-button-secondary" onClick={() => this.like(data.link)}/>
       }
