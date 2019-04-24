@@ -139,14 +139,14 @@ class ArticleView extends Component {
     }
   }
 
-  renderComment(comment) {
+  renderComment(data) {
       return <div className="p-grid">
           <div className="p-col-1 p-col-align-center">
-            {this.renderCommentAdminButton(comment.link, comment.author_id)}
+            {this.renderCommentAdminButton(data.comment.link, data.comment.author_id)}
           </div>
           <div className="p-col-11">
             <div className="comment">
-            <p>{comment.comment}</p>
+            <p>{data.comment.comment}</p>
           </div>
           </div>
         </div>
