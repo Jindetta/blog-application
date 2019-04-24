@@ -34,6 +34,11 @@
     margin: 10pt;
 }
 
+#page .comment-like-buttons {
+    position: relative;
+    bottom: 5pt;
+}
+
 #page #comment-button {
     margin-top: 5pt;
 }

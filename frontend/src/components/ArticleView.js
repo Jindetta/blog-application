@@ -140,7 +140,6 @@ class ArticleView extends Component {
   }
 
   renderComment(data) {
-    console.log(data)
       return <div className="p-grid">
             <div className="p-col-1  p-col-align-center">
               <div className="p-grid">
@@ -183,7 +182,7 @@ class ArticleView extends Component {
 
   renderCommentAdminButton(commentUrl, authorId) {
     if(this.props.role === "ADMIN" || this.props.userId === authorId) {
-      return <Button icon="pi pi-times" className="p-button-danger" onClick={() => this.deleteComment(commentUrl)}/>
+      return <Button icon="pi pi-times" className="p-button-danger comment-like-buttons" onClick={() => this.deleteComment(commentUrl)}/>
     } else {
       return ""
     }
@@ -193,9 +192,9 @@ class ArticleView extends Component {
   renderCommentLike(data) {
     if(this.props.role == "ADMIN" || this.props.role == "USER") {
       if (data.hasLiked) {
-        return <Button icon="pi pi-chevron-up" className="p-button-primary" onClick={() => this.dislike(data.link)}/>
+        return <Button icon="pi pi-chevron-up" className="p-button-primary comment-like-buttons" onClick={() => this.dislike(data.link)}/>
       } else {
-        return <Button icon="pi pi-chevron-up" className="p-button-secondary" onClick={() => this.like(data.link)}/>
+        return <Button icon="pi pi-chevron-up" className="p-button-secondary comment-like-buttons" onClick={() => this.like(data.link)}/>
       }
     }
   }
