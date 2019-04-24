@@ -120,7 +120,7 @@ class ArticleView extends Component {
   }
 
   deleteArticle() {
-    const url = window.location.origin + this.props.BLOG_DATA.link;
+    const url = this.fetchUrl + this.props.BLOG_DATA.link;
     fetch(url,{
       method:"DELETE",
       credentials:"include",
