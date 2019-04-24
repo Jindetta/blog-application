@@ -12,27 +12,53 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
+ * Main class of the program.
  *
+ * @author Joonas Lauhala {@literal <joonas.lauhala@tuni.fi>}
+ *         Tuukka Juusela {@literal <tuukka.juusela@tuni.fi}
+ * @version 20192802
+ * @since   1.8
  */
 @SpringBootApplication
 public class BackendApplication implements CommandLineRunner {
 
+    /**
+     * Repository for blog posts.
+     */
     @Autowired
     BlogRepository blogRepository;
 
+    /**
+     * Repository for users.
+     */
     @Autowired
     UserRepository userRepository;
 
+    /**
+     * Repository for comments.
+     */
     @Autowired
     CommentRepository commentRepository;
 
+    /**
+     * Repository for likes.
+     */
     @Autowired
     LikeRepository likeRepository;
 
+    /**
+     * Starts the program.
+     * @param args Arguments of program. Not in use.
+     */
 	public static void main(String[] args) {
 		SpringApplication.run(BackendApplication.class, args);
 	}
 
+    /**
+     * Creates dummy data to all databases when program is started.
+     * @param args Arguments of method. Not in use.
+     * @throws Exception Exception if something goes wrong in creation of test data.
+     */
     @Override
     public void run(String... args) throws Exception {
 	    ArrayList<User> users = new ArrayList<>();
