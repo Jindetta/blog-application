@@ -135,7 +135,7 @@ public class BlogController {
 
     @GetMapping("blogs/{articleId:\\d+}/comments")
     public Iterable<CommentLikeResponse> getBlogComments(@PathVariable int articleId, Authentication auth) {
-        Optional<User> user = userRepository.findUserByUsername(auth.getName());
+        Optional<User> user = auth != null ? userRepository.findUserByUsername(auth.getName()) : Optional.empty();
         Iterable<Comment> comments = commentRepository.findByArticleId(articleId);
         Iterable<CommentLikeResponse> commentLikeResponses = new ArrayList<>();
 
