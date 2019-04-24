@@ -14,6 +14,7 @@ class WriteView extends Component {
     this.state = {title: "", content: ""};
 
     this.postData = this.postData.bind(this);
+    this.fetchUrl = `${window.location.origin}/api`
   }
 
   postData(url = '') {
@@ -51,7 +52,7 @@ class WriteView extends Component {
             </div>
             <div className="p-col-12 p-md-12">
               <Button label="Clear" icon="pi pi-times" onClick={() => this.setState({content:''})}/>
-              <Button label="Post" icon="pi pi-pencil" onClick={() => this.postData("http://localhost:8080/blogs")}/>
+              <Button label="Post" icon="pi pi-pencil" onClick={() => this.postData(this.fetchUrl)}/>
             </div>
           </div>
         </div>
