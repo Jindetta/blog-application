@@ -18,7 +18,12 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
+ * Configuration class for login events.
  *
+ * @author Joonas Lauhala {@literal <joonas.lauhala@tuni.fi>}
+ *         Tuukka Juusela {@literal <tuukka.juusela@tuni.fi}
+ * @version 20192802
+ * @since   1.8
  */
 @Configuration
 @EnableWebSecurity
@@ -26,20 +31,21 @@ import java.util.stream.Stream;
 public class LoginConfigurer extends WebSecurityConfigurerAdapter {
 
     /**
-     *
+     * Stores login entry point.
      */
     @Autowired
     private LoginEntryPoint authenticationEntryPoint;
 
     /**
-     *
+     * Store user repository.
      */
     @Autowired
     private UserRepository repository;
 
     /**
+     * Configures global information.
      *
-     * @param auth
+     * @param auth  AuthenticationManagerBuilder instance.
      */
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) {
@@ -65,9 +71,9 @@ public class LoginConfigurer extends WebSecurityConfigurerAdapter {
     }
 
     /**
+     * Configures basic authentication and session requests.
      *
-     * @param http
-     * @throws Exception
+     * @param http          HttpSecurity instance.
      */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -88,18 +94,19 @@ public class LoginConfigurer extends WebSecurityConfigurerAdapter {
     }
 
     /**
+     * Configures resources.
      *
-     * @param web
-     * @throws Exception
+     * @param web   WebSecurity instance.
      */
     @Override
-    public void configure(WebSecurity web) throws Exception {
+    public void configure(WebSecurity web) {
         web.ignoring().antMatchers("/*.*", "/static/**");
     }
 
     /**
+     * Returns PasswordEncoder.
      *
-     * @return
+     * @return PasswordEncoder object.
      */
     @Bean
     public PasswordEncoder passwordEncoder() {
